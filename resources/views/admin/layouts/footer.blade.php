@@ -1,3 +1,3 @@
-<footer>
-    <p>&copy; {{ date('Y') }} mijn werkstuk</p>
+<footer class="bg-dark text-white text-center py-3 mt-auto">
+    <p>&copy; {{ date('Y') }} Mijn Werkstuk</p>
 </footer>
