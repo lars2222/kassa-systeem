@@ -12,12 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_discount', function (Blueprint $table) {
-            $table->string('product_id');
-            $table->unsignedBigInteger('discount_id');
+            $table->id();
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('discount_id')->constrained('discounts')->onDelete('cascade');
             $table->timestamps();
-
-            $table->foreign('product_id')->references('barcode')->on('products')->onDelete('cascade');
-            $table->foreign('discount_id')->references('id')->on('discounts')->onDelete('cascade');
         });
     }
 

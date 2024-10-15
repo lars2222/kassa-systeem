@@ -10,7 +10,11 @@
                 </div>
                 <div class="col-8 text-end">
                     @hasSection('back-btn')
-                    <a href="@yield('back-btn')" class="btn btn-sm btn-dark"><i class="fas fa-angle-left me-1"></i></a>
+                        <a href="@yield('back-btn')" class="btn btn-sm btn-dark"><i class="fas fa-angle-left me-1"></i></a>
+                    @endif
+                    @hasSection('create-btn')
+                    <a href="@yield('create-btn')" class=""><i class=""></i></a>
+                    @endSection
                 </div>
             </div>
         </div>

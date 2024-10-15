@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('discounts', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('type');
-            $table->decimal('value', 10, 2);
+            $table->decimal('value', 10, 4);
             $table->timestamp('start_date');
-            $table->timestamp('end_date');
+            $table->timestamp('end_date')->nullable();
             $table->timestamps();
         });
     }

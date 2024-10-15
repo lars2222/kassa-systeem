@@ -12,9 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->string('barcode')->primary();
+            $table->id();
+            $table->string('barcode')->unique();
             $table->string('name');
-            $table->decimal('price', 10, 2);
+            $table->decimal('price', 10, 4);
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('tax_rate_id')->constrained('tax_rates')->onDelete('cascade');
+            $table->enum('btw_type', ['low', 'high']);
             $table->timestamps();
         });
     }
