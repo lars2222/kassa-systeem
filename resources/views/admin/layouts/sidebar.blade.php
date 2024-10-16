@@ -2,6 +2,12 @@
     <h2 class="mt-4">Menu</h2>
     <ul class="nav flex-column">
         <li class="nav-item">
+            <a href="">producten</a>
+        </li>
+        <li class="nav-item">
+            <a href="">categorieen</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
         </li>
         <li class="nav-item">
