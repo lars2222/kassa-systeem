@@ -7,16 +7,19 @@ use App\Http\Requests\Admin\Product\UpdateProductRequest as ProductUpdateProduct
 use App\Http\Requests\Admin\Products\StoreProductRequest;
 use App\Http\Requests\Admin\Products\UpdateProductRequest;
 use App\Models\Product;
+use App\Repositories\CategoryRepository;
 use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    protected $productRepository;
+    protected $productRepository, $categoryRepository;
 
-    public function __construct(ProductRepository $productRepository)
+
+    public function __construct(ProductRepository $productRepository, CategoryRepository $categoryRepository)
     {
         $this->productRepository = $productRepository;  
+        $this->categoryRepository = $categoryRepository;
     }
 
     public function index()
@@ -27,12 +30,15 @@ class ProductController extends Controller
 
     public function create()
     {
-        return view('admin.products.create');
+        $categories = $this->categoryRepository->getAllPaginated();
+
+        return view('admin.products.create', compact('categories'));
     }
 
     public function store(StoreProductRequest $request)
     {
         Product::create($request->all());
+
         return redirect()->route('products.index')->with('success', __('labels.added'));
     }
 

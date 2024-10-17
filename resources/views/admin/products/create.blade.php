@@ -20,9 +20,20 @@
             <input type="text" class="form-control" name="price" id="price" required>
         </div>
 
+        <div class="form-group">
+            <label for="category">Categorieën</label>
+            <select name="category_id" id="category_id" class="form-control" required>
+                <option value="">Selecteer een categorie</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
        <div class="form-group">
             <label for="btw_type">BTW Type</label>
             <select class="form-control" name="btw_type" id="btw_type" required>
+                <option value="">selecteer een btw type</option>
                 <option value="high">High</option>
                 <option value="low">Low</option>
             </select>
