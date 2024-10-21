@@ -19,4 +19,9 @@ class Product extends Model
         'btw_type',
     ];
 
+    public function discounts()
+    {
+        return $this->belongsToMany(Discount::class, 'product_discount');
+    }
+
 }

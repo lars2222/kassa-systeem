@@ -17,4 +17,9 @@ class Discount extends Model
         'end_date',
     ];
 
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'product_discount');
+    }
+
 }

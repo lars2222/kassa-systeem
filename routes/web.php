@@ -22,4 +22,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('/admin/categories', CategoryController::class);
     Route::resource('/admin/taxRates', TaxRatesController::class);
     Route::resource('/admin/discounts', DiscountController::class);
+    Route::get('/products/discount-products', [ProductController::class, 'discountProduct'])->name('products.discount-products');
+    Route::post('/products/{product}/add-discount', [ProductController::class, 'addDiscount'])->name('products.addDiscount');
+    Route::delete('/products/{product}/discounts/{discount}', [ProductController::class, 'removeDiscount'])->name('products.removeDiscount');
+
 });
