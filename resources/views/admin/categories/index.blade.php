@@ -16,9 +16,8 @@
         <tbody>
             @foreach($categories as $category)
                 <tr>
-                    <td>{{ $category->barcode }}</td>
                     <td>{{ $category->name }}</td>
-                    <td>{{ number_format($category->price, 2, ',', '.') }} €</td> 
+                    <td>{{ $category->description }}</td>
                     <td>
                         <a href="{{ route('categories.edit', $category) }}" class="btn btn-sm btn-dark me-2">
                             <i class="fa-solid fa-pen-to-square"></i>

@@ -25,11 +25,19 @@
         <div class="form-group">
             <label for="btw_type">BTW Type</label>
             <select class="form-control" name="btw_type" id="btw_type" required>
-                <option value="high">High</option>
-                <option value="low">Low</option>
+                <option value="high" {{ old('btw_type', $product->btw_type) == 'high' ? 'selected' : '' }}>High</option>
+                <option value="low" {{ old('btw_type', $product->btw_type) == 'low' ? 'selected' : '' }}>Low</option>
             </select>
         </div> 
-
+        
+        <div class="form-group">
+            <label for="category">Categorie</label>
+            <select class="form-control" name="category_id" id="category_id" required>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
 
         <button type="submit" class="btn btn-primary">Opslaan</button>
     </form>

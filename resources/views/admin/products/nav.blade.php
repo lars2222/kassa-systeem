@@ -8,6 +8,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('products.discount-products')}} ">Kortingen aan producten koppelen</a>
             </li>
+            <li>
+                <a class="nav-link" href="{{ route('products.stock') }}">Product Voorraad</a>
+            </li>
         </ul>
     </div>
 </nav>

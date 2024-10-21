@@ -25,5 +25,6 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/products/discount-products', [ProductController::class, 'discountProduct'])->name('products.discount-products');
     Route::post('/products/{product}/add-discount', [ProductController::class, 'addDiscount'])->name('products.addDiscount');
     Route::delete('/products/{product}/discounts/{discount}', [ProductController::class, 'removeDiscount'])->name('products.removeDiscount');
-
+    Route::get('products/product-stock', [ProductController::class, 'productStock'])->name('products.stock');
+    Route::put('products/{product}/update-stock', [ProductController::class, 'updateStock'])->name('products.updateStock');
 });

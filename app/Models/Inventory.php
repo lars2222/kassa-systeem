@@ -1,27 +1,24 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
-class Product extends Model
+class Inventory extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'barcode',
-        'name',
-        'price',
-        'category_id',
-        'tax_rate_id',
-        'btw_type',
+        'product_id',
+        'quantity',
+        'minimum_stock',
     ];
 
-    public function discounts()
+    public function product()
     {
-        return $this->belongsToMany(Discount::class, 'product_discount');
+        return $this->belongsTo(Product::class);
     }
 
     public function inventory()
