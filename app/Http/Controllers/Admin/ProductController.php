@@ -119,6 +119,7 @@ class ProductController extends Controller
         return redirect()->back()->with('success', 'Voorraad bijgewerkt!');
     }
 
+
     public function removeDiscount($productId, $discountId)
     {
         $product = Product::findOrFail($productId);

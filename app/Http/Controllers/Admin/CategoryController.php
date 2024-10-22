@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\categories\StoreCategoryRequest;
 use App\Http\Requests\Admin\Categories\UpdateCategoryRequest;
 use App\Models\Category;
+use App\Models\Product;
 use App\Repositories\CategoryRepository;
 use Illuminate\Http\Request;
 
@@ -49,6 +50,15 @@ class CategoryController extends Controller
         $this->categoryRepository->update($category->id, $update, 'category');
 
         return redirect()->route('categories.index')->with('success', __('labels.added'));
+    }
+
+    public function show($categoryId)
+    {
+        $category = Category::findOrFail($categoryId);
+
+        $products = Product::where('category_id', $categoryId)->get();
+        
+        return view('client.webshop.categories-products', compact('category', 'products'));
     }
 
     public function destroy(Category $category)

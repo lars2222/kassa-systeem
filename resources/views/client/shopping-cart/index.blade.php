@@ -8,7 +8,7 @@
             <ul class="list-group">
                 @foreach ($categories as $category)
                     <li class="list-group-item">
-                        <a href="{{ route('cart.view', $category->id) }}">
+                        <a href="{{ route('category.show', $category->id) }}">
                             {{ $category->name }}
                         </a>
                     </li>
