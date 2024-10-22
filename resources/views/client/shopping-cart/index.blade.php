@@ -1,4 +1,4 @@
-@extends('client.layouts.app')
+@extends('client.shopping-cart.layouts.app')
 
 @section('content')
 <div class="container">
@@ -18,6 +18,15 @@
         
         <div class="col-md-9">
             <h1 class="my-4">Winkelwagentje</h1>
+
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
 
             @if (empty($cart))
                 <div class="alert alert-warning" role="alert">

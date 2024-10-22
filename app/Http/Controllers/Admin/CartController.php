@@ -34,10 +34,15 @@ class CartController extends Controller
 
     public function updateCart(Request $request, $productId)
     {
-        $quantity = $request->input('quantity', 1);
+        $quantity = $request->input('quantity', 1); 
+    
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+    
         $this->cart->updateQuantity($productId, $quantity);
         
-        return redirect()->back()->with('success', 'Aantal bijgewerkt!');
+        return redirect()->route('cart.view')->with('success', 'Aantal bijgewerkt!');
     }
 
     public function viewCart()
@@ -54,8 +59,6 @@ class CartController extends Controller
 
     public function checkout()
     {
-        // Hier kun je logica toevoegen voor het afrekenen
-        // Vergeet niet de cart te legen na de checkout
         $this->cart->emptyCart();
         
         return redirect()->route('home')->with('success', 'Bedankt voor je bestelling!');
