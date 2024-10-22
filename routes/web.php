@@ -18,13 +18,13 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::group(['middleware' => ['auth']], function(){
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::resource('/admin/products', ProductController::class); 
+    Route::resource('/admin/products', ProductController::class)->except(['show']); 
     Route::resource('/admin/categories', CategoryController::class);
     Route::resource('/admin/taxRates', TaxRatesController::class);
     Route::resource('/admin/discounts', DiscountController::class);
-    Route::get('/products/discount-products', [ProductController::class, 'discountProduct'])->name('products.discount-products');
-    Route::post('/products/{product}/add-discount', [ProductController::class, 'addDiscount'])->name('products.addDiscount');
-    Route::delete('/products/{product}/discounts/{discount}', [ProductController::class, 'removeDiscount'])->name('products.removeDiscount');
-    Route::get('products/product-stock', [ProductController::class, 'productStock'])->name('products.stock');
-    Route::put('products/{product}/update-stock', [ProductController::class, 'updateStock'])->name('products.updateStock');
+    Route::get('admin/products/discount-products', [ProductController::class, 'discountProduct'])->name('products.discount-products');
+    Route::post('admin/products/{product}/add-discount', [ProductController::class, 'addDiscount'])->name('products.addDiscount');
+    Route::delete('admin/products/{product}/discounts/{discount}', [ProductController::class, 'removeDiscount'])->name('products.removeDiscount');
+    Route::get('admin/products/product-stock', [ProductController::class, 'productStock'])->name('products.stock');
+    Route::put('admin/products/{product}/update-stock', [ProductController::class, 'updateStock'])->name('products.updateStock');
 });

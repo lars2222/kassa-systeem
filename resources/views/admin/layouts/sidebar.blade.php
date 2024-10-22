@@ -2,10 +2,13 @@
     <h2 class="mt-4">Menu</h2>
     <ul class="nav flex-column">
         <li class="nav-item">
-            <a href="">producten</a>
+            <a href="{{ route('products.index') }}">producten</a>
         </li>
         <li class="nav-item">
-            <a href="">categorieen</a>
+            <a href="{{ route('categories.index')}}">categorieen</a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('discounts.index')}}">kortingen</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>

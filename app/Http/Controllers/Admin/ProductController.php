@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Inventories\UpdateInventoryRequest;
 use App\Http\Requests\Admin\Products\StoreProductRequest;
 use App\Http\Requests\Admin\Products\UpdateProductRequest;
+use App\Models\Discount;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Repositories\CategoryRepository;
@@ -127,7 +128,6 @@ class ProductController extends Controller
         return redirect()->route('products.discount-products')->with('success', 'Korting succesvol verwijderd van product.');
     }
    
-
     public function destroy(Product $product)
     {
         $product->delete();
