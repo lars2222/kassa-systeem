@@ -14,12 +14,12 @@ class CartController extends Controller
 
     public function __construct()
     {
-        $this->cart = new Cart(); // Maak een nieuw Cart-object
+        $this->cart = new Cart(); 
     }
 
     public function addToCart(Request $request, $productId)
     {
-        $quantity = $request->input('quantity', 1); // Default naar 1 als geen hoeveelheid is opgegeven
+        $quantity = $request->input('quantity', 1); 
         $this->cart->addProduct($productId, $quantity);
         
         return redirect()->back()->with('success', 'Product toegevoegd aan je winkelwagentje!');
@@ -29,20 +29,21 @@ class CartController extends Controller
     {
         $this->cart->removeProduct($productId);
         
-        return redirect()->back()->with('success', 'Product verwijderd uit je winkelwagentje!');
+        return response()->json(['success' => true]);
     }
 
     public function updateCart(Request $request, $productId)
     {
-        $quantity = $request->input('quantity', 1); 
+        $quantity = $request->input('quantity');
     
         $request->validate([
             'quantity' => 'required|integer|min:1',
         ]);
     
         $this->cart->updateQuantity($productId, $quantity);
-        
-        return redirect()->route('cart.view')->with('success', 'Aantal bijgewerkt!');
+    
+        $product = Product::find($productId);
+        return response()->json(['price' => $product->price]);
     }
 
     public function viewCart()

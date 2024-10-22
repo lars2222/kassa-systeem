@@ -44,23 +44,29 @@
                     </thead>
                     <tbody>
                         @foreach ($cart as $item)
-                            <tr>
+                            <tr data-product-id="{{ $item['product']->id }}">
                                 <td>{{ $item['product']->name }}</td>
-                                <td>{{ $item['quantity'] }}</td>
-                                <td>{{ number_format($item['product']->price * $item['quantity'], 2, ',', '.') }} €</td>
                                 <td>
-                                    <form action="{{ route('cart.remove', $item['product']->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Verwijderen</button>
-                                    </form>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <button type="button" class="btn btn-outline-secondary decrease-quantity">-</button>
+                                        </div>
+                                        <input type="number" class="form-control text-center quantity" value="{{ $item['quantity'] }}" min="1" readonly>
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-outline-secondary increase-quantity">+</button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="subtotal">{{ number_format($item['product']->price * $item['quantity'], 2, ',', '.') }} €</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm remove-product">Verwijderen</button>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
 
-                <h3>Totaal: {{ number_format($total, 2, ',', '.') }} €</h3>
+                <h3>Totaal: <span class="total">{{ number_format($total, 2, ',', '.') }} €</span></h3>
                 <form action="{{ route('cart.checkout') }}" method="POST">
                     @csrf
                     <button type="submit" class="btn btn-success">Afrekenen</button>
@@ -70,3 +76,5 @@
     </div>
 </div>
 @endsection
+
+@include('client.shopping-cart.js')
