@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Inventories\UpdateInventoryRequest;
 use App\Http\Requests\Admin\Products\StoreProductRequest;
 use App\Http\Requests\Admin\Products\UpdateProductRequest;
-use App\Models\Discount;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Repositories\CategoryRepository;
@@ -14,6 +13,7 @@ use App\Repositories\DiscountRepository;
 use App\Repositories\InventoryRepository;
 use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -42,8 +42,15 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
-        Product::create($request->all());
+        $validatedData = $request->validated(); 
+    
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+            $validatedData['image'] = $imagePath;
+        }
 
+        Product::create($validatedData);
+    
         return redirect()->route('products.index')->with('success', __('labels.added'));
     }
 
@@ -56,6 +63,15 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
         $validatedData = $request->validated();
+    
+        if ($request->hasFile('image')) {
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image); 
+            }
+    
+            $imagePath = $request->file('image')->store('products', 'public');
+            $validatedData['image'] = $imagePath; 
+        }
     
         $product->update($validatedData);
     

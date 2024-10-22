@@ -25,6 +25,7 @@ class UpdateProductRequest extends FormRequest
             'category_id' => 'nullable|integer', 
             'tax_rate_id' => 'nullable|integer', 
             'btw_type' => 'required|string|in:high,low', 
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10000',
         ];
     }
 

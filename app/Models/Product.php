@@ -17,6 +17,7 @@ class Product extends Model
         'category_id',
         'tax_rate_id',
         'btw_type',
+        'image',
     ];
 
     public function discounts()

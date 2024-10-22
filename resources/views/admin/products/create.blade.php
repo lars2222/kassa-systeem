@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-5">
     <h2>Product toevoegen</h2>
-    <form action="{{ route('products.store') }}" method="post">
+    <form action="{{ route('products.store') }}" method="post" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="barcode">Barcode</label>
@@ -18,6 +18,11 @@
         <div class="form-group">
             <label for="price">Prijs</label>
             <input type="text" class="form-control" name="price" id="price" required>
+        </div>
+
+        <div class="form-group">
+            <label for="image">Afbeelding</label>
+            <input type="file" class="form-control" name="image" id="image" accept="image/*">
         </div>
 
         <div class="form-group">
