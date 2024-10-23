@@ -1,3 +1,5 @@
+@extends('client.shopping-cart.layouts.app')
+
 <div class="container text-center">
     <div class="my-4">
         @if (request('search'))
