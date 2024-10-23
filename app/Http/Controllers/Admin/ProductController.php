@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Inventories\UpdateInventoryRequest;
 use App\Http\Requests\Admin\Products\StoreProductRequest;
 use App\Http\Requests\Admin\Products\UpdateProductRequest;
+use App\Models\Category;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Repositories\CategoryRepository;
@@ -135,6 +136,18 @@ class ProductController extends Controller
         return redirect()->back()->with('success', 'Voorraad bijgewerkt!');
     }
 
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+    
+        $products = Product::when($search, function ($query, $search) {
+            return $query->where('name', 'like', '%' . $search . '%');
+        })->get();
+
+        $category = null;
+    
+        return view('client.webshop.categories-products', compact('products', 'search', 'category'));
+    }
 
     public function removeDiscount($productId, $discountId)
     {

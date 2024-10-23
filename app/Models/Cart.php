@@ -46,8 +46,6 @@ class Cart
     public function emptyCart()
     {
         Session::forget('cart');
-
-        return redirect()->route('cart.view')->with('success', 'je winkelwagen is geleegd');
     }
 
     public function getCart()

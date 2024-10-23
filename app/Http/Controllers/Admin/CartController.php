@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Product;
+use GuzzleHttp\Handler\Proxy;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -47,7 +48,7 @@ class CartController extends Controller
     }
 
     public function viewCart()
-    {
+{
         $cart = $this->cart->getCart(); 
         $total = $this->cart->calculateTotal(); 
     
@@ -56,6 +57,13 @@ class CartController extends Controller
         $products = Product::all();
     
         return view('client.shopping-cart.index', compact('cart', 'total', 'categories', 'products'));
+    }
+
+    public function emptyCart()
+    {
+        $this->cart->emptyCart(); 
+        
+        return redirect()->route('cart.view')->with('success', 'Je winkelwagen is geleegd');
     }
 
     public function checkout()
