@@ -143,10 +143,8 @@ class ProductController extends Controller
         $products = Product::when($search, function ($query, $search) {
             return $query->where('name', 'like', '%' . $search . '%');
         })->get();
-
-        $category = null;
     
-        return view('client.webshop.categories-products', compact('products', 'search', 'category'));
+        return view('client.webshop.products', compact('products', 'search'));
     }
 
     public function removeDiscount($productId, $discountId)

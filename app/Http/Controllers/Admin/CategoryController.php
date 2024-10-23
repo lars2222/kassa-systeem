@@ -57,7 +57,7 @@ class CategoryController extends Controller
         $category = Category::findOrFail($categoryId);
         $products = Product::where('category_id', $categoryId)->get();
         
-        return view('client.webshop.categories-products', compact('category', 'products'));
+        return view('client.webshop.products', compact('category', 'products'));
     }
 
     public function destroy(Category $category)

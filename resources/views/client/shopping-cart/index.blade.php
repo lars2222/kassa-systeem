@@ -3,8 +3,10 @@
 @section('content')
 <div class="row">
     <div class="col-md-3">
-        <h4 class="my-4">Categorieën</h4>
+        <h2>zoek</h2>
         <ul class="list-group">
+            @include('client.partials.search-bar')
+            
             @foreach ($categories as $category)
                 <li class="list-group-item">
                     <a href="{{ route('category.show', $category->id)}}">{{ $category->name}}</a>
