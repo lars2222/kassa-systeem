@@ -18,7 +18,19 @@
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ $product->name }}</h5>
                             <p class="card-text">Prijs: {{ number_format($product->price, 2, ',', '.') }} €</p>
-                            @include('client.partials.product-info')
+
+                            <!-- Button to open product info -->
+                            <button class="open-button" onclick="toggleProductInfo(this);">product info</button>
+
+                            <!-- Product information (initially hidden) -->
+                            <div class="product-info" style="display: none;">
+                                <ul id="product-details">
+                                    <li>Product Name: {{ $product->name }}</li>
+                                    <li>Price: {{ number_format($product->price, 2, ',', '.') }} €</li>
+                                    <li>Description: {{ $product->description }}</li>
+                                </ul>
+                                <button type="button" class="btn cancel" onclick="toggleProductInfo(this)">Close</button>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <form action="{{ route('cart.add', $product->id) }}" method="POST">
@@ -34,3 +46,5 @@
         </div>
     @endif
 </div>
+
+@include('client.partials.js')

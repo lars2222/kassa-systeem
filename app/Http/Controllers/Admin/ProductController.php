@@ -147,6 +147,14 @@ class ProductController extends Controller
         return view('client.webshop.products', compact('products', 'search'));
     }
 
+    public function show($productId)
+    {
+        $product = Product::findOrFail($productId);
+
+        dd($product);
+
+        return view('client.partials.product-info', compact('product'));
+    }
 
     public function removeDiscount($productId, $discountId)
     {
