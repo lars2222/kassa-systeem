@@ -54,10 +54,11 @@ class CategoryController extends Controller
 
     public function show($categoryId)
     {
+        $categories = $this->categoryRepository->getAllPaginated();
         $category = Category::findOrFail($categoryId);
         $products = Product::where('category_id', $categoryId)->get();
         
-        return view('client.webshop.products', compact('category', 'products'));
+        return view('client.webshop.products', compact('category', 'products', 'categories'));
     }
 
     public function destroy(Category $category)

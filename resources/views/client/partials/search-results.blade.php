@@ -1,5 +1,26 @@
 <div class="results-container mt-4">
-    @if($products->isEmpty())
+    <div class="container">
+        <div class="row" style="display: flex; justify-content: center; flex-wrap: wrap;">
+            @php $categoryCounter = 0; @endphp
+            @foreach ($categories as $category)
+                @if ($categoryCounter >= 6)
+                    @break
+                @endif
+
+                <div class="col-md-2 mb-4 d-flex justify-content-center">
+                    <a href="{{ route('category.show', $category->id) }}" class="category-card">
+                        <div class="card text-center" style="width: 100%; padding: 20px;">
+                            <h2>{{ $category->name }}</h2>
+                        </div>
+                    </a>
+                </div>
+
+                @php $categoryCounter++; @endphp
+            @endforeach
+        </div>
+    </div>
+
+    @if ($products->isEmpty())
         <div class="alert alert-warning" role="alert">
             Geen producten gevonden.
         </div>
@@ -7,7 +28,7 @@
         @php $counter = 0; @endphp
         <div class="row" style="display: flex; justify-content: center; flex-wrap: wrap;">
             @foreach ($products as $product)
-                @if ($counter > 0 && $counter % 5 === 0) 
+                @if ($counter > 0 && $counter % 4 === 0) 
                     </div>
                     <div class="row" style="display: flex; justify-content: center; flex-wrap: wrap;">
                 @endif
@@ -19,17 +40,15 @@
                             <h5 class="card-title">{{ $product->name }}</h5>
                             <p class="card-text">Prijs: {{ number_format($product->price, 2, ',', '.') }} €</p>
 
-                            <!-- Button to open product info -->
-                            <button class="open-button" onclick="toggleProductInfo(this);">product info</button>
+                            <button class="open-button" onclick="toggleProductInfo(this);">Product Info</button>
 
-                            <!-- Product information (initially hidden) -->
                             <div class="product-info" style="display: none;">
                                 <ul id="product-details">
-                                    <li>Product Name: {{ $product->name }}</li>
-                                    <li>Price: {{ number_format($product->price, 2, ',', '.') }} €</li>
-                                    <li>Description: {{ $product->description }}</li>
+                                    <li>Productnaam: {{ $product->name }}</li>
+                                    <li>Prijs: {{ number_format($product->price, 2, ',', '.') }} €</li>
+                                    <li>Beschrijving: {{ $product->description }}</li>
                                 </ul>
-                                <button type="button" class="btn cancel" onclick="toggleProductInfo(this)">Close</button>
+                                <button type="button" class="btn cancel" onclick="toggleProductInfo(this)">Sluiten</button>
                             </div>
                         </div>
                         <div class="card-footer">

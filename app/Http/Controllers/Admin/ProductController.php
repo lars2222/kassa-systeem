@@ -139,12 +139,14 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $search = $request->input('search');
+
+        $categories = $this->categoryRepository->getAllPaginated();
     
         $products = Product::when($search, function ($query, $search) {
             return $query->where('name', 'like', '%' . $search . '%');
         })->get();
     
-        return view('client.webshop.products', compact('products', 'search'));
+        return view('client.webshop.products', compact('products', 'search', 'categories'));
     }
 
     public function removeDiscount($productId, $discountId)

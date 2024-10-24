@@ -35,7 +35,7 @@ Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name
 Route::post('/cart/remove/{productId}', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::post('/cart/update/{productId}', [CartController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-Route::get('/categorie/{categoryId}', [CategoryController::class, 'show'])->name('category.show');
+Route::get('/category/show/{categoryId}', [CategoryController::class, 'show'])->name('category.show');
 Route::post('/cart/empty', [CartController::class, 'emptyCart'])->name('cart.empty');
 Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
 
