@@ -147,6 +147,7 @@ class ProductController extends Controller
         return view('client.webshop.products', compact('products', 'search'));
     }
 
+
     public function removeDiscount($productId, $discountId)
     {
         $product = Product::findOrFail($productId);

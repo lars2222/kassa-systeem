@@ -18,7 +18,7 @@
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ $product->name }}</h5>
                             <p class="card-text">Prijs: {{ number_format($product->price, 2, ',', '.') }} €</p>
-                            <p class="card-text">BTW-type: {{ ucfirst($product->btw_type) }}</p>
+                            @include('client.partials.product-info')
                         </div>
                         <div class="card-footer">
                             <form action="{{ route('cart.add', $product->id) }}" method="POST">
