@@ -64,4 +64,9 @@ class Cart
 
         return $total;
     }
+
+    public function getTotal()
+    {
+        return $this->calculateTotal();
+    }
 }

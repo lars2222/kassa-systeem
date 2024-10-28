@@ -66,10 +66,33 @@ class CartController extends Controller
         return redirect()->route('cart.view')->with('success', 'Je winkelwagen is geleegd');
     }
 
-    public function checkout()
+    public function checkout(Request $request)
     {
+        $cart = $this->cart->getCart();
+        $totalAmount = $this->cart->getTotal(); 
+
+        $change = 0.0; 
+        if ($request->payment_method === 'cash') {
+            $cashReceived = $request->input('cash_received');
+            if ($cashReceived < $totalAmount) {
+                return redirect()->back()->withErrors(['cash_received' => 'Het ontvangen bedrag is niet voldoende om de bestelling te betalen.']);
+            }
+            $change = floatval($cashReceived) - floatval($totalAmount); 
+        }
+
         $this->cart->emptyCart();
-        
-        return redirect()->route('home')->with('success', 'Bedankt voor je bestelling!');
+
+        return redirect()->route('cart.reciept')->with([
+            'success' => 'Bedankt voor je bestelling!',
+            'cart' => $cart,
+            'change' => number_format($change, 2, ',', '.'), 
+        ]);
     }
+
+    public function reciept()
+    {
+        $change = session('change', 0);
+        return view('client.shopping-cart.reciept', ['change' => $change]);
+    }
+
 }

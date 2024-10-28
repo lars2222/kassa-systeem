@@ -38,4 +38,5 @@ Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.c
 Route::get('/category/show/{categoryId}', [CategoryController::class, 'show'])->name('category.show');
 Route::post('/cart/empty', [CartController::class, 'emptyCart'])->name('cart.empty');
 Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
+Route::get('/cart/reciept', [CartController::class, 'reciept'])->name('cart.reciept');
 

@@ -72,6 +72,20 @@
             <h3>Totaal: <span class="total">{{ number_format($total, 2, ',', '.') }} €</span></h3>
             <form action="{{ route('cart.checkout') }}" method="POST">
                 @csrf
+                <div class="form-group">
+                    <label for="payment_method">Kies een betaalmethode:</label>
+                    <select name="payment_method" id="payment_method" class="form-control" required>
+                        <option value="" disabled selected>Kies een betaalmethode</option>
+                        <option value="cash">Contant</option>
+                        <option value="pin">Pin</option>
+                    </select>
+                </div>
+            
+                <div class="form-group cash-input" style="display:none;">
+                    <label for="cash_received">Ontvangen bedrag:</label>
+                    <input type="number" name="cash_received" id="cash_received" class="form-control" step="0.01" min="0">
+                </div>
+                
                 <button type="submit" class="btn btn-success">Afrekenen</button>
             </form>
         @endif

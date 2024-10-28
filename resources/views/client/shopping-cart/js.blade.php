@@ -1,6 +1,19 @@
+<!-- Include jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     $(document).ready(function() {
+        // Handle payment method selection
+        const cashInputDiv = $('.cash-input');
+        $('#payment_method').on('change', function() {
+            if ($(this).val() === 'cash') {
+                cashInputDiv.show();
+            } else {
+                cashInputDiv.hide();
+            }
+        });
+
+        // Increase quantity
         $('.increase-quantity').click(function() {
             let row = $(this).closest('tr');
             let productId = row.data('product-id');
@@ -10,6 +23,7 @@
             updateCart(productId, currentQuantity);
         });
 
+        // Decrease quantity
         $('.decrease-quantity').click(function() {
             let row = $(this).closest('tr');
             let productId = row.data('product-id');
@@ -22,6 +36,7 @@
             }
         });
 
+        // Remove product
         $('.remove-product').click(function() {
             let row = $(this).closest('tr');
             let productId = row.data('product-id');
@@ -43,6 +58,7 @@
             });
         });
 
+        // Update cart function
         function updateCart(productId, quantity) {
             $.ajax({
                 url: '/cart/update/' + productId,
@@ -63,6 +79,7 @@
             });
         }
 
+        // Update total function
         function updateTotal() {
             let total = 0;
             $('.subtotal').each(function() {
@@ -71,6 +88,7 @@
             $('.total').text(numberWithCommas(total.toFixed(2)) + ' €');
         }
 
+        // Format number with commas
         function numberWithCommas(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace('.', ',');
         }
