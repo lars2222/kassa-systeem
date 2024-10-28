@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\Payment;
 use App\Models\Product;
+use App\Models\Transaction;
 use GuzzleHttp\Handler\Proxy;
 use Illuminate\Http\Request;
 
@@ -68,7 +70,7 @@ class CartController extends Controller
 
     public function checkout(Request $request)
     {
-        $cart = $this->cart->getCart();
+        $cart = $this->cart->getCart(); 
         $totalAmount = $this->cart->getTotal(); 
 
         $change = 0.0; 
@@ -80,12 +82,39 @@ class CartController extends Controller
             $change = floatval($cashReceived) - floatval($totalAmount); 
         }
 
+        $transaction = Transaction::create([
+            'user_id' => 1, 
+            'subtotal' => $totalAmount,
+            'total' => $totalAmount, 
+            'tax' => 0, 
+        ]);
+
+        $payment = Payment::create([
+            'transaction_id' => $transaction->id,
+            'amount' => $totalAmount,
+            'method' => $request->payment_method,
+            'cash_received' => $request->payment_method === 'cash' ? $cashReceived : null,
+            'change_given' => $change,
+        ]);
+
+        foreach ($cart as $item) {
+            if (isset($item['product'])) { 
+                $productId = $item['product']->id; 
+                $transaction->products()->attach($productId, [
+                    'quantity' => $item['quantity'], 
+                    'price_at_time' => $item['product']->price, 
+                    'total' => $item['quantity'] * $item['product']->price, 
+                    'discount_applied' => $item['discount'] ?? 0, 
+                ]);
+            }    
+        }
+
         $this->cart->emptyCart();
 
         return redirect()->route('cart.reciept')->with([
             'success' => 'Bedankt voor je bestelling!',
             'cart' => $cart,
-            'change' => number_format($change, 2, ',', '.'), 
+            'change' => number_format($change, 2, ',', '.'),
         ]);
     }
 

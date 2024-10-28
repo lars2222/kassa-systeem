@@ -14,6 +14,7 @@ class Product extends Model
         'barcode',
         'name',
         'price',
+        'description',
         'category_id',
         'tax_rate_id',
         'btw_type',

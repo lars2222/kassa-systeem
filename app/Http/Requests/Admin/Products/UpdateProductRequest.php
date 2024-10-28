@@ -22,6 +22,7 @@ class UpdateProductRequest extends FormRequest
             'barcode' => 'required|string|max:255', 
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
+            'description' => 'required|string|max:555',
             'category_id' => 'nullable|integer', 
             'tax_rate_id' => 'nullable|integer', 
             'btw_type' => 'required|string|in:high,low', 

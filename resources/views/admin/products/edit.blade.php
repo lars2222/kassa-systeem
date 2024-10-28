@@ -23,6 +23,11 @@
         </div>
 
         <div class="form-group">
+            <label for="price">beschrijving</label>
+            <input type="text" class="form-control" name="description" id="description" value="{{ old('description', $product->description) }}" required>
+        </div>
+
+        <div class="form-group">
             <label for="image">Afbeelding</label>
             <input type="file" class="form-control" name="image" id="image" accept="image/*"> 
         </div>
