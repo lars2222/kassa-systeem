@@ -21,6 +21,12 @@ class Product extends Model
         'image',
     ];
 
+    public function transactions()
+    {
+        return $this->belongsToMany(Transaction::class)
+                    ->withPivot('quantity', 'price_at_time', 'total');
+    }
+
     public function discounts()
     {
         return $this->belongsToMany(Discount::class, 'product_discount');

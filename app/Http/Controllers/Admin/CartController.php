@@ -89,7 +89,7 @@ class CartController extends Controller
             'tax' => 0, 
         ]);
 
-        $payment = Payment::create([
+        Payment::create([
             'transaction_id' => $transaction->id,
             'amount' => $totalAmount,
             'method' => $request->payment_method,
@@ -111,17 +111,33 @@ class CartController extends Controller
 
         $this->cart->emptyCart();
 
+        // Sla de transactie-ID op in de sessie
+        session(['transaction_id' => $transaction->id]);
+
         return redirect()->route('cart.reciept')->with([
-            'success' => 'Bedankt voor je bestelling!',
+            'success' => 'Bedankt voor je bestelling! Je kassabon is beschikbaar als PDF.',
             'cart' => $cart,
             'change' => number_format($change, 2, ',', '.'),
         ]);
     }
 
-    public function reciept()
+
+    public function chooseReciept()
     {
         $change = session('change', 0);
         return view('client.shopping-cart.reciept', ['change' => $change]);
+    }
+
+    public function handleReceiptOption(Request $request)
+    {
+        $receiptOption = $request->input('receiptOption');
+        $transactionId = session('transaction_id');
+
+        if($receiptOption === 'print'){
+            return redirect()->route('receipt.generatePdf', ['transactionId' => $transactionId]);
+        }
+
+        return redirect()->route('welcome')->with('success', 'bedankt voor je bestelling');
     }
 
 }

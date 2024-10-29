@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ReceiptController;
+use App\Http\Controllers\Admin\RecieptController;
 use App\Http\Controllers\Admin\TaxRatesController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,5 +40,6 @@ Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.c
 Route::get('/category/show/{categoryId}', [CategoryController::class, 'show'])->name('category.show');
 Route::post('/cart/empty', [CartController::class, 'emptyCart'])->name('cart.empty');
 Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
-Route::get('/cart/reciept', [CartController::class, 'reciept'])->name('cart.reciept');
-
+Route::get('/cart/reciept', [CartController::class, 'chooseReciept'])->name('cart.reciept');
+Route::get('/receipt/{transactionId}', [ReceiptController::class, 'generatePdf'])->name('receipt.generatePdf');
+Route::post('/cart/receipt-option', [CartController::class, 'handleReceiptOption'])->name('cart.receiptOption');

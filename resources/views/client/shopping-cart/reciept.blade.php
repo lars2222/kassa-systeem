@@ -19,7 +19,10 @@
         </div>
         <div class="mt-4">
             <h3>Kies een optie voor de bon</h3>
-            <form id="receipt-form">
+            <form id="receipt-form" action="{{ route('cart.receiptOption') }}" method="POST">
+                @csrf
+                <input type="hidden" name="transactionId" value="{{ session('transaction_id') }}">
+                
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="receiptOption" id="printReceipt" value="print">
                     <label class="form-check-label" for="printReceipt">
@@ -27,7 +30,7 @@
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="receiptOption" id="noReceipt" value="none">
+                    <input class="form-check-input" type="radio" name="receiptOption" id="noReceipt" value="none" checked>
                     <label class="form-check-label" for="noReceipt">
                         Geen bon
                     </label>
@@ -35,7 +38,6 @@
                 <button type="submit" class="btn btn-primary mt-3">Bevestig keuze</button>
             </form>
         </div>
-        <a href="/" class="btn btn-secondary mt-4">Terug naar Home</a>
     </div>
 </body>
 </html>
