@@ -50,7 +50,7 @@ class CartController extends Controller
     }
 
     public function viewCart()
-{
+    {
         $cart = $this->cart->getCart(); 
         $total = $this->cart->calculateTotal(); 
     
@@ -73,16 +73,12 @@ class CartController extends Controller
         $cart = $this->cart->getCart(); 
         $totalAmount = $this->cart->getTotal(); 
 
-        // Verwerk betaling en bepaal wisselgeld
         $change = $this->processPayment($request, $totalAmount);
 
-        // Maak transactie aan
         $transaction = $this->createTransaction($totalAmount);
 
-        // Voeg producten toe aan de transactie
         $this->attachProductsToTransaction($transaction, $cart);
 
-        // Afronding: voorraad, winkelwagen legen, sessie bijwerken
         $this->finalizeOrder($transaction->id, $cart);
 
         return redirect()->route('cart.receipt')->with([
@@ -103,7 +99,7 @@ class CartController extends Controller
             }
             $change = floatval($cashReceived) - floatval($totalAmount); 
         } elseif ($request->payment_method === 'pin') {
-            // Eventuele logica voor pinbetaling
+
         }
 
         return $change;
