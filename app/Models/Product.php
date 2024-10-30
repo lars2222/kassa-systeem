@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 
 class Product extends Model
@@ -36,4 +37,23 @@ class Product extends Model
     {
         return $this->hasOne(Inventory::class);
     }
+
+    public static function getTopSellingProducts($limit = 5)
+    {
+        return self::withCount(['transactions as sold_quantity' => function ($query) {
+                    $query->select(DB::raw("SUM(quantity)"));
+                }])
+                ->orderByDesc('sold_quantity')
+                ->take($limit)
+                ->get();
+    }
+
+    public static function getTotalSalesPerProduct()
+    {
+        return DB::table('product_transaction')
+            ->select('product_id', DB::raw('SUM(quantity * price_at_time) as total_sales'))
+            ->groupBy('product_id')
+            ->get();
+    }
+
 }

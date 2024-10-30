@@ -70,79 +70,72 @@ class CartController extends Controller
     }
 
     public function checkout(CheckoutRequest $request)
-{
-    $cart = $this->cart->getCart(); 
-    $totalAmount = $this->cart->getTotal(); 
+    {
+        $cart = $this->cart->getCart(); 
+        $totalAmount = $this->cart->getTotal(); 
 
-    $change = 0.0; 
-    if ($request->payment_method === 'cash') {
-        $cashReceived = $request->input('cash_received');
-        if ($cashReceived < $totalAmount) {
-            return redirect()->back()->withErrors(['cash_received' => 'Het ontvangen bedrag is niet voldoende om de bestelling te betalen.']);
+        $change = 0.0; 
+        if ($request->payment_method === 'cash') {
+            $cashReceived = $request->input('cash_received');
+            if ($cashReceived < $totalAmount) {
+                return redirect()->back()->withErrors(['cash_received' => 'Het ontvangen bedrag is niet voldoende om de bestelling te betalen.']);
+            }
+            $change = floatval($cashReceived) - floatval($totalAmount); 
         }
-        $change = floatval($cashReceived) - floatval($totalAmount); 
+
+        $transaction = Transaction::create([
+            'user_id' => 1,
+            'subtotal' => $totalAmount,
+            'total' => $totalAmount, 
+            'tax' => 0, 
+        ]);
+
+        Payment::create([
+            'transaction_id' => $transaction->id,
+            'amount' => $totalAmount,
+            'method' => $request->payment_method,
+            'cash_received' => $request->payment_method === 'cash' ? $cashReceived : null,
+            'change_given' => $change,
+        ]);
+
+        foreach ($cart as $item) {
+            if (isset($item['product'])) { 
+                $productId = $item['product']->id; 
+                $quantity = $item['quantity']; 
+
+                $transaction->products()->attach($productId, [
+                    'quantity' => $quantity, 
+                    'price_at_time' => $item['product']->price, 
+                    'total' => $quantity * $item['product']->price, 
+                    'discount_applied' => $item['discount'] ?? 0, 
+                ]);
+            }    
+        }
+
+        $this->updateInventory($cart);
+
+        $this->cart->emptyCart();
+
+        session(['transaction_id' => $transaction->id]);
+
+        return redirect()->route('cart.reciept')->with([
+            'success' => 'Bedankt voor je bestelling! Je kassabon is beschikbaar als PDF.',
+            'cart' => $cart,
+            'change' => number_format($change, 2, ',', '.'),
+        ]);
     }
-
-    // Create transaction
-    $transaction = Transaction::create([
-        'user_id' => 1,
-        'subtotal' => $totalAmount,
-        'total' => $totalAmount, 
-        'tax' => 0, 
-    ]);
-
-    // Create payment record
-    Payment::create([
-        'transaction_id' => $transaction->id,
-        'amount' => $totalAmount,
-        'method' => $request->payment_method,
-        'cash_received' => $request->payment_method === 'cash' ? $cashReceived : null,
-        'change_given' => $change,
-    ]);
-
-    // Process each item in the cart
-    foreach ($cart as $item) {
-        if (isset($item['product'])) { 
-            $productId = $item['product']->id; 
-            $quantity = $item['quantity']; // Get the quantity of the product in the cart
-
-            // Update the transaction product association
-            $transaction->products()->attach($productId, [
-                'quantity' => $quantity, 
-                'price_at_time' => $item['product']->price, 
-                'total' => $quantity * $item['product']->price, 
-                'discount_applied' => $item['discount'] ?? 0, 
-            ]);
-        }    
-    }
-
-    // Update inventory for the products sold
-    $this->updateInventory($cart);
-
-    // Clear the cart after successful transaction
-    $this->cart->emptyCart();
-
-    session(['transaction_id' => $transaction->id]);
-
-    return redirect()->route('cart.reciept')->with([
-        'success' => 'Bedankt voor je bestelling! Je kassabon is beschikbaar als PDF.',
-        'cart' => $cart,
-        'change' => number_format($change, 2, ',', '.'),
-    ]);
-}
 
     protected function updateInventory($cart)
     {
         foreach ($cart as $item) {
             if (isset($item['product'])) { 
                 $productId = $item['product']->id; 
-                $quantity = $item['quantity']; // Get the quantity of the product in the cart
+                $quantity = $item['quantity']; 
 
-                // Update product stock
                 $product = Product::find($productId);
                 if ($product && $product->inventory) {
-                    $product->inventory->quantity -= $quantity; // Deduct the purchased quantity from stock
-                    $product->inventory->save(); // Save the updated stock
+                    $product->inventory->quantity -= $quantity; 
+                    $product->inventory->save();
                 }
             }
         }
