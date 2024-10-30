@@ -3,13 +3,11 @@
 
 <script>
     $(document).ready(function() {
-        // Toggle cash input field based on selected payment method
         const cashInputDiv = $('.cash-input');
         $('#payment_method').on('change', function() {
             $(this).val() === 'cash' ? cashInputDiv.show() : cashInputDiv.hide();
         });
 
-        // Increase quantity and update cart
         $('.increase-quantity').click(function() {
             let row = $(this).closest('tr');
             let productId = row.data('product-id');
@@ -17,7 +15,6 @@
             updateCart(productId, quantity);
         });
 
-        // Decrease quantity (ensure quantity remains above 1)
         $('.decrease-quantity').click(function() {
             let row = $(this).closest('tr');
             let productId = row.data('product-id');
@@ -25,7 +22,6 @@
             if (quantity > 0) updateCart(productId, quantity);
         });
 
-        // Remove product from cart
         $('.remove-product').click(function() {
             let row = $(this).closest('tr');
             let productId = row.data('product-id');
@@ -45,7 +41,6 @@
             });
         });
 
-        // Function to update cart with new quantity
         function updateCart(productId, quantity) {
             $.ajax({
                 url: '/cart/update/' + productId,
@@ -67,7 +62,6 @@
             });
         }
 
-        // Calculate and display updated cart total
         function updateTotal() {
             let total = 0;
             $('.subtotal').each(function() {
@@ -76,7 +70,6 @@
             $('.total').text(formatCurrency(total));
         }
 
-        // Format number as currency (with comma separator and Euro symbol)
         function formatCurrency(amount) {
             return amount.toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
         }
