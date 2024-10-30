@@ -151,13 +151,19 @@ class CartController extends Controller
     public function handleReceiptOption(Request $request)
     {
         $receiptOption = $request->input('receiptOption');
+
         $transactionId = session('transaction_id');
 
         if($receiptOption === 'print'){
             return redirect()->route('receipt.generatePdf', ['transactionId' => $transactionId]);
         }
 
-        return redirect()->route('welcome')->with('success', 'bedankt voor je bestelling');
+        return redirect()->route('shopping-cart.success')->with('success', 'gefeliciteerd met je bestelling');
+    }
+
+    public function success()
+    {
+        return view('client.shopping-cart.success');
     }
 
 }

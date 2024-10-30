@@ -32,14 +32,19 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function() {
     Route::put('/products/{product}/update-stock', [ProductController::class, 'updateStock'])->name('products.updateStock');
 });
 
-Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
-Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');
-Route::post('/cart/remove/{productId}', [CartController::class, 'removeFromCart'])->name('cart.remove');
-Route::post('/cart/update/{productId}', [CartController::class, 'updateCart'])->name('cart.update');
-Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+Route::prefix('cart')->group(function() {
+    Route::get('/', [CartController::class, 'viewCart'])->name('cart.view');
+    Route::post('/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::post('/remove/{productId}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+    Route::post('/update/{productId}', [CartController::class, 'updateCart'])->name('cart.update');
+    Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    Route::post('/empty', [CartController::class, 'emptyCart'])->name('cart.empty');
+    Route::get('/receipt', [CartController::class, 'chooseReceiptOption'])->name('cart.receipt');
+    Route::post('/receipt-option', [CartController::class, 'handleReceiptOption'])->name('cart.receiptOption');
+    Route::get('/success', [CartController::class, 'success'])->name('shopping-cart.success');
+});
+
 Route::get('/category/show/{categoryId}', [CategoryController::class, 'show'])->name('category.show');
-Route::post('/cart/empty', [CartController::class, 'emptyCart'])->name('cart.empty');
 Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
-Route::get('/cart/reciept', [CartController::class, 'chooseRecieptOption'])->name('cart.reciept');
 Route::get('/receipt/{transactionId}', [ReceiptController::class, 'generatePdf'])->name('receipt.generatePdf');
-Route::post('/cart/receipt-option', [CartController::class, 'handleReceiptOption'])->name('cart.receiptOption');
+
