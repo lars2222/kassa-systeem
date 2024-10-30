@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                            <form action="{{ route('cart.add', $product->id) }}" method="POST" class="add-to-cart-form">
                                 @csrf
                                 <button type="submit" class="btn btn-primary w-100">Toevoegen aan winkelwagentje</button>
                             </form>
@@ -66,4 +66,4 @@
     @endif
 </div>
 
-@include('client.partials.js')
+@include('client.partials.search-result-js')

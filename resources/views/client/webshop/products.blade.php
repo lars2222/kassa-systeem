@@ -18,4 +18,4 @@
     @include('client.partials.search-results')
 </div>
 
-@include('client.webshop.js')
+@include('client.webshop.products-js')

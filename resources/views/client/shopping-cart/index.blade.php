@@ -93,4 +93,4 @@
 </div>
 @endsection
 
-@include('client.shopping-cart.js')
+@include('client.shopping-cart.cart-js')
