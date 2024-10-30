@@ -17,7 +17,6 @@
     <p>Datum: {{ $date }}</p>
     
     <h3>Transactiegegevens</h3>
-    <p>Transactie ID: {{ $transaction->id }}</p>
     <p>Totaal: €{{ number_format($transaction->total, 2, ',', '.') }}</p>
 
     <h3>Producten</h3>

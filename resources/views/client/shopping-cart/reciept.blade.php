@@ -38,6 +38,24 @@
                 <button type="submit" class="btn btn-primary mt-3">Bevestig keuze</button>
             </form>
         </div>
+        <div class="mt-4">
+            <p>Je wordt binnen <strong id="countdown">10</strong> seconden doorgestuurd naar de winkelwagen.</p>
+        </div>
     </div>
 </body>
 </html>
+
+<script>
+    let countdownElement = document.getElementById('countdown');
+    let countdown = 10; 
+
+    let interval = setInterval(function() {
+        countdown--;
+        countdownElement.textContent = countdown;
+
+        if (countdown <= 0) {
+            clearInterval(interval);
+            window.location.href = "{{ route('cart.view') }}";
+        }
+    }, 1000);
+</script>

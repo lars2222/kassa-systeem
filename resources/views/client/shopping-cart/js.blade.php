@@ -3,62 +3,49 @@
 
 <script>
     $(document).ready(function() {
-        // Handle payment method selection
+        // Toggle cash input field based on selected payment method
         const cashInputDiv = $('.cash-input');
         $('#payment_method').on('change', function() {
-            if ($(this).val() === 'cash') {
-                cashInputDiv.show();
-            } else {
-                cashInputDiv.hide();
-            }
+            $(this).val() === 'cash' ? cashInputDiv.show() : cashInputDiv.hide();
         });
 
-        // Increase quantity
+        // Increase quantity and update cart
         $('.increase-quantity').click(function() {
             let row = $(this).closest('tr');
             let productId = row.data('product-id');
-            let quantityInput = row.find('.quantity');
-            let currentQuantity = parseInt(quantityInput.val()) + 1;
-
-            updateCart(productId, currentQuantity);
+            let quantity = parseInt(row.find('.quantity').val()) + 1;
+            updateCart(productId, quantity);
         });
 
-        // Decrease quantity
+        // Decrease quantity (ensure quantity remains above 1)
         $('.decrease-quantity').click(function() {
             let row = $(this).closest('tr');
             let productId = row.data('product-id');
-            let quantityInput = row.find('.quantity');
-            let currentQuantity = parseInt(quantityInput.val());
-
-            if (currentQuantity > 1) {
-                currentQuantity -= 1;
-                updateCart(productId, currentQuantity);
-            }
+            let quantity = parseInt(row.find('.quantity').val()) - 1;
+            if (quantity > 0) updateCart(productId, quantity);
         });
 
-        // Remove product
+        // Remove product from cart
         $('.remove-product').click(function() {
             let row = $(this).closest('tr');
             let productId = row.data('product-id');
-
+            
             $.ajax({
                 url: '/cart/remove/' + productId,
                 type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                },
-                success: function(response) {
+                data: { _token: '{{ csrf_token() }}' },
+                success: function() {
                     row.remove();
-                    // Update the total
                     updateTotal();
                 },
                 error: function(xhr) {
+                    alert("Er is een fout opgetreden bij het verwijderen van het product.");
                     console.error(xhr);
                 }
             });
         });
 
-        // Update cart function
+        // Function to update cart with new quantity
         function updateCart(productId, quantity) {
             $.ajax({
                 url: '/cart/update/' + productId,
@@ -70,27 +57,28 @@
                 success: function(response) {
                     let row = $('tr[data-product-id="' + productId + '"]');
                     row.find('.quantity').val(quantity);
-                    row.find('.subtotal').text(numberWithCommas((response.price * quantity).toFixed(2)) + ' €');
+                    row.find('.subtotal').text(formatCurrency(response.price * quantity));
                     updateTotal();
                 },
                 error: function(xhr) {
+                    alert("Er is een fout opgetreden bij het bijwerken van de hoeveelheid.");
                     console.error(xhr);
                 }
             });
         }
 
-        // Update total function
+        // Calculate and display updated cart total
         function updateTotal() {
             let total = 0;
             $('.subtotal').each(function() {
                 total += parseFloat($(this).text().replace(' €', '').replace(',', '.'));
             });
-            $('.total').text(numberWithCommas(total.toFixed(2)) + ' €');
+            $('.total').text(formatCurrency(total));
         }
 
-        // Format number with commas
-        function numberWithCommas(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace('.', ',');
+        // Format number as currency (with comma separator and Euro symbol)
+        function formatCurrency(amount) {
+            return amount.toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
         }
     });
 </script>

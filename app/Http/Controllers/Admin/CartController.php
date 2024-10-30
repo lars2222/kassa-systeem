@@ -9,7 +9,6 @@ use App\Models\Category;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Transaction;
-use GuzzleHttp\Handler\Proxy;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -74,30 +73,54 @@ class CartController extends Controller
         $cart = $this->cart->getCart(); 
         $totalAmount = $this->cart->getTotal(); 
 
-        $change = 0.0; 
+        // Verwerk betaling en bepaal wisselgeld
+        $change = $this->processPayment($request, $totalAmount);
+
+        // Maak transactie aan
+        $transaction = $this->createTransaction($totalAmount);
+
+        // Voeg producten toe aan de transactie
+        $this->attachProductsToTransaction($transaction, $cart);
+
+        // Afronding: voorraad, winkelwagen legen, sessie bijwerken
+        $this->finalizeOrder($transaction->id, $cart);
+
+        return redirect()->route('cart.receipt')->with([
+            'success' => 'Bedankt voor je bestelling! Je kassabon is beschikbaar als PDF.',
+            'cart' => $cart,
+            'change' => number_format($change, 2, ',', '.'),
+        ]);
+    }
+
+    private function processPayment($request, $totalAmount)
+    {
+        $change = 0.0;
+
         if ($request->payment_method === 'cash') {
             $cashReceived = $request->input('cash_received');
             if ($cashReceived < $totalAmount) {
-                return redirect()->back()->withErrors(['cash_received' => 'Het ontvangen bedrag is niet voldoende om de bestelling te betalen.']);
+                redirect()->back()->withErrors(['cash_received' => 'Het ontvangen bedrag is niet voldoende om de bestelling te betalen.']);
             }
             $change = floatval($cashReceived) - floatval($totalAmount); 
+        } elseif ($request->payment_method === 'pin') {
+            // Eventuele logica voor pinbetaling
         }
 
-        $transaction = Transaction::create([
+        return $change;
+    }
+
+    private function createTransaction($totalAmount)
+    {
+        return Transaction::create([
             'user_id' => 1,
             'subtotal' => $totalAmount,
             'total' => $totalAmount, 
             'tax' => 0, 
         ]);
+    }
 
-        Payment::create([
-            'transaction_id' => $transaction->id,
-            'amount' => $totalAmount,
-            'method' => $request->payment_method,
-            'cash_received' => $request->payment_method === 'cash' ? $cashReceived : null,
-            'change_given' => $change,
-        ]);
-
+    private function attachProductsToTransaction($transaction, $cart)
+    {
         foreach ($cart as $item) {
             if (isset($item['product'])) { 
                 $productId = $item['product']->id; 
@@ -111,18 +134,13 @@ class CartController extends Controller
                 ]);
             }    
         }
-
-        $this->updateInventory($cart);
-
-        $this->cart->emptyCart();
-
-        session(['transaction_id' => $transaction->id]);
-
-        return redirect()->route('cart.reciept')->with([
-            'success' => 'Bedankt voor je bestelling! Je kassabon is beschikbaar als PDF.',
-            'cart' => $cart,
-            'change' => number_format($change, 2, ',', '.'),
-        ]);
+    }
+    
+    private function finalizeOrder($transactionId, $cart)
+    {
+        $this->updateInventory($cart);       
+        $this->cart->emptyCart();           
+        session(['transaction_id' => $transactionId]); 
     }
 
     protected function updateInventory($cart)
@@ -141,8 +159,7 @@ class CartController extends Controller
         }
     }
 
-
-    public function chooseRecieptOption()
+    public function chooseReceiptOption()
     {
         $change = session('change', 0);
         return view('client.shopping-cart.reciept', ['change' => $change]);
@@ -158,12 +175,6 @@ class CartController extends Controller
             return redirect()->route('receipt.generatePdf', ['transactionId' => $transactionId]);
         }
 
-        return redirect()->route('shopping-cart.success')->with('success', 'gefeliciteerd met je bestelling');
+        return redirect()->route('cart.view')->with('success', 'Gefeliciteerd met je bestelling');
     }
-
-    public function success()
-    {
-        return view('client.shopping-cart.success');
-    }
-
 }
