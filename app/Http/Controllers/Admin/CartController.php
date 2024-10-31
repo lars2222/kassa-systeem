@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Checkout\CheckoutRequest;
 use App\Models\Cart;
 use App\Models\Category;
-use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Transaction;
 use Illuminate\Http\Request;

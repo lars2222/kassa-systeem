@@ -10,13 +10,12 @@
                     <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top" alt="{{ $product->name }}" style="height: 200px; object-fit: cover;">
                     <div class="card-body text-center">
                         <h5 class="card-title">{{ $product->name }}</h5>
-                        <p class="card-text">Prijs: {{ number_format($product->price, 2, ',', '.') }} €</p>
+                        <p class="card-text">Prijs (incl. btw): {{ number_format($product->getPriceIncludingtax(), 2, ',', '.') }} €</p>
                         <button class="open-button" onclick="toggleProductInfo(this);">Product Info</button>
                         <div class="product-info" style="display: none;">
                             <ul id="product-details">
                                 <li>Productnaam: {{ $product->name }}</li>
-                                <li>Prijs: {{ number_format($product->price, 2, ',', '.') }} €</li>
-                                <li>Beschrijving: {{ $product->description }}</li>
+                                <li>Prijs: {{ number_format($product->getPriceIncludingtax(), 2, ',', '.') }} €</li>
                             </ul>
                             <button type="button" class="btn cancel" onclick="toggleProductInfo(this)">Sluiten</button>
                         </div>

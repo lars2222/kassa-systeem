@@ -38,6 +38,11 @@ class Product extends Model
         return $this->hasOne(Inventory::class);
     }
 
+    public function taxRate()
+    {
+        return $this->belongsTo(TaxRate::class, 'tax_rate_id');
+    }
+
     public static function getTopSellingProducts($limit = 5)
     {
         return self::withCount(['transactions as sold_quantity' => function ($query) {
@@ -54,6 +59,15 @@ class Product extends Model
             ->select('product_id', DB::raw('SUM(quantity * price_at_time) as total_sales'))
             ->groupBy('product_id')
             ->get();
+    }
+
+    public function getPriceIncludingtax()
+    {
+        if ($this->taxRate) {
+            $taxPercentage = $this->taxRate->percentage; 
+            return $this->price * (1 + $taxPercentage / 100);
+        }
+        return $this->price; 
     }
 
 }
