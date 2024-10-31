@@ -139,15 +139,15 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $search = $request->input('search');
-
+    
         $products = Product::when($search, function ($query, $search) {
             return $query->where('name', 'like', '%' . $search . '%');
         })->get();
-
+    
         if ($request->ajax()) {
             return view('client.partials.product-list', compact('products'));
         }
-
+    
         $categories = $this->categoryRepository->getAllPaginated();
         return view('client.webshop.products', compact('products', 'categories'));
     }
