@@ -7,7 +7,6 @@ use App\Http\Requests\Admin\Products\UpdateTaxRateRequest;
 use App\Http\Requests\Admin\TaxRates\StoreTaxRateRequest;
 use App\Models\TaxRate;
 use App\Repositories\TaxRateRepository;
-use Illuminate\Http\Request;
 
 class TaxRatesController extends Controller
 {

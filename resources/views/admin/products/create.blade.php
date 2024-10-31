@@ -40,14 +40,15 @@
             </select>
         </div>
 
-       <div class="form-group">
-            <label for="btw_type">BTW Type</label>
-            <select class="form-control" name="btw_type" id="btw_type" required>
-                <option value="">selecteer een btw type</option>
-                <option value="high">High</option>
-                <option value="low">Low</option>
+        <div class="form-group">
+            <label for="tax_rate_id">BTW Type</label>
+            <select class="form-control" name="tax_rate_id" id="tax_rate_id" required>
+                <option value="">Selecteer een btw type</option>
+                @foreach($taxRates as $taxRate)
+                    <option value="{{ $taxRate->id }}">{{ $taxRate->type }}</option>
+                @endforeach
             </select>
-        </div> 
+        </div>
 
         <button type="submit" class="btn btn-primary">Opslaan</button>
     </form>

@@ -33,12 +33,16 @@
         </div>
 
         <div class="form-group">
-            <label for="btw_type">BTW Type</label>
-            <select class="form-control" name="btw_type" id="btw_type" required>
-                <option value="high" {{ old('btw_type', $product->btw_type) == 'high' ? 'selected' : '' }}>High</option>
-                <option value="low" {{ old('btw_type', $product->btw_type) == 'low' ? 'selected' : '' }}>Low</option>
+            <label for="tax_rate_id">BTW Type</label>
+            <select class="form-control" name="tax_rate_id" id="tax_rate_id" required>
+                <option value="">Selecteer een btw type</option>
+                @foreach($taxRates as $taxRate)
+                    <option value="{{ $taxRate->id }}" {{ old('tax_rate_id', $product->tax_rate_id) == $taxRate->id ? 'selected' : '' }}>
+                        {{ $taxRate->type }}
+                    </option>
+                @endforeach
             </select>
-        </div> 
+        </div>  
         
         <div class="form-group">
             <label for="category">Categorie</label>

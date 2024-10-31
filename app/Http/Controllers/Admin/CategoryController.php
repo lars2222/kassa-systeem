@@ -38,13 +38,11 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
-
         return view('admin.categories.edit', compact('category'));
     }
 
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-
         $update = $request->only($category->getFillable());
 
         $this->categoryRepository->update($category->id, $update, 'category');

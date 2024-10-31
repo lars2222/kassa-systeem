@@ -6,26 +6,27 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Inventories\UpdateInventoryRequest;
 use App\Http\Requests\Admin\Products\StoreProductRequest;
 use App\Http\Requests\Admin\Products\UpdateProductRequest;
-use App\Models\Category;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Repositories\CategoryRepository;
 use App\Repositories\DiscountRepository;
 use App\Repositories\InventoryRepository;
 use App\Repositories\ProductRepository;
+use App\Repositories\TaxRateRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    protected $productRepository, $categoryRepository, $discountRepository, $inventoryRepository;
+    protected $productRepository, $categoryRepository, $discountRepository, $inventoryRepository, $taxRateRepository;
 
-    public function __construct(ProductRepository $productRepository, CategoryRepository $categoryRepository, DiscountRepository $discountRepository, InventoryRepository $inventoryRepository)
+    public function __construct(ProductRepository $productRepository, CategoryRepository $categoryRepository, DiscountRepository $discountRepository, InventoryRepository $inventoryRepository, TaxRateRepository $taxRateRepository)
     {
         $this->productRepository = $productRepository;  
         $this->categoryRepository = $categoryRepository;
         $this->discountRepository = $discountRepository;
         $this->inventoryRepository = $inventoryRepository;
+        $this->taxRateRepository = $taxRateRepository;
     }
 
     public function index()
@@ -37,33 +38,36 @@ class ProductController extends Controller
     public function create()
     {
         $categories = $this->categoryRepository->getAllPaginated();
+        $taxRates = $this->taxRateRepository->getAllPaginated();
 
-        return view('admin.products.create', compact('categories'));
+        return view('admin.products.create', compact('categories','taxRates'));
     }
 
     public function store(StoreProductRequest $request)
     {
-        $validatedData = $request->validated(); 
+        $products = $request->validated(); 
     
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('products', 'public');
-            $validatedData['image'] = $imagePath;
+            $products['image'] = $imagePath;
         }
 
-        Product::create($validatedData);
+        Product::create($products);
     
         return redirect()->route('products.index')->with('success', __('labels.added'));
     }
 
     public function edit(Product $product)
     {
+        $taxRates = $this->taxRateRepository->getAllPaginated();
         $categories = $this->categoryRepository->getAllPaginated();
-        return view('admin.products.edit', compact('product', 'categories'));
+    
+        return view('admin.products.edit', compact('product', 'categories', 'taxRates'));
     }
     
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $validatedData = $request->validated();
+        $products = $request->validated();
     
         if ($request->hasFile('image')) {
             if ($product->image) {
@@ -71,10 +75,10 @@ class ProductController extends Controller
             }
     
             $imagePath = $request->file('image')->store('products', 'public');
-            $validatedData['image'] = $imagePath; 
+            $products['image'] = $imagePath; 
         }
     
-        $product->update($validatedData);
+        $product->update($products);
     
         return redirect()->route('products.index')->with('success', __('labels.updated'));
     }

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('description');
             $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('cascade');
             $table->foreignId('tax_rate_id')->nullable()->constrained('tax_rates')->onDelete('cascade');
-            $table->enum('btw_type', ['low', 'high']);
+            $table->enum('btw_type', ['low', 'high'])->nullable();
             $table->timestamps();
         });
     }

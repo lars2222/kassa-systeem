@@ -17,7 +17,7 @@
             @foreach($taxRates as $taxRate)
                 <tr>
                     <td>{{ $taxRate->type }}</td>
-                    <td>{{ $taxRate->percentage }}</td>
+                    <td>%{{ $taxRate->percentage }}</td>
                     <td>
                         <a href="{{ route('taxRates.edit', $taxRate) }}" class="btn btn-sm btn-dark me-2">
                             <i class="fa-solid fa-pen-to-square"></i>
