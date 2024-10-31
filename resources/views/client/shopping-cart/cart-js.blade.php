@@ -1,11 +1,34 @@
-<!-- Include jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
     $(document).ready(function() {
         const cashInputDiv = $('.cash-input');
+
         $('#payment_method').on('change', function() {
             $(this).val() === 'cash' ? cashInputDiv.show() : cashInputDiv.hide();
+        });
+
+        $('.add-to-cart-form').on('submit', function(event) {
+            event.preventDefault();
+            const form = $(this);
+            const productId = form.find('input[name="product_id"]').val();
+            const quantity = form.find('input[name="quantity"]').val() || 1;
+
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    quantity: quantity,
+                },
+                success: function(response) {
+                    // No message shown; user can continue shopping
+                    // Optionally, you can update cart count or other UI elements silently if needed
+                },
+                error: function(xhr) {
+                    console.error("Er is een fout opgetreden bij het toevoegen van het product aan je winkelwagentje.", xhr);
+                }
+            });
         });
 
         $('.increase-quantity').click(function() {
@@ -35,8 +58,7 @@
                     updateTotal();
                 },
                 error: function(xhr) {
-                    alert("Er is een fout opgetreden bij het verwijderen van het product.");
-                    console.error(xhr);
+                    console.error("Er is een fout opgetreden bij het verwijderen van het product.", xhr);
                 }
             });
         });
@@ -56,8 +78,7 @@
                     updateTotal();
                 },
                 error: function(xhr) {
-                    alert("Er is een fout opgetreden bij het bijwerken van de hoeveelheid.");
-                    console.error(xhr);
+                    console.error("Er is een fout opgetreden bij het bijwerken van de hoeveelheid.", xhr);
                 }
             });
         }

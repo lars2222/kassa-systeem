@@ -22,9 +22,10 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <form action="{{ route('cart.add', $product->id) }}" method="POST" class="add-to-cart-form">
+                        <form action="{{ route('cart.add', $product->id) }}" method="POST" class="add-to-cart-form" id="add-to-cart-form-{{ $product->id }}">
                             @csrf
-                            <button type="submit" class="btn btn-primary w-100">Toevoegen aan winkelwagentje</button>
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <button type="submit" class="btn btn-primary w-100 add-to-cart-button">Toevoegen aan winkelwagentje</button>
                         </form>
                     </div>
                 </div>

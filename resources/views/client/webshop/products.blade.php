@@ -10,7 +10,7 @@
         @endif
     </div>
 
-    @include('client.partials.search-bar') <!-- Zoekbalk -->
+    @include('client.partials.search-bar') 
 
     <div class="results-container mt-4">
         <div class="container">
@@ -29,7 +29,7 @@
     </div>
 
     <div class="products-list mt-4">
-        @include('client.partials.product-list', ['products' => $products]) <!-- Productenlijst -->
+        @include('client.partials.product-list', ['products' => $products]) 
     </div>
 </div>
 @endsection

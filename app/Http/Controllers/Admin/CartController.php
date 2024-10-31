@@ -22,11 +22,12 @@ class CartController extends Controller
 
     public function addToCart(Request $request, $productId)
     {
-        $quantity = $request->input('quantity', 1); 
+        $quantity = $request->input('quantity', 1);
         $this->cart->addProduct($productId, $quantity);
         
-        return redirect()->back()->with('success', 'Product toegevoegd aan je winkelwagentje!');
+        return response()->noContent();
     }
+    
 
     public function removeFromCart($productId)
     {
