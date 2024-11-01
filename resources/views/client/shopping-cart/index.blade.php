@@ -41,7 +41,7 @@
                     <tr>
                         <th scope="col">Product</th>
                         <th scope="col">Aantal</th>
-                        <th scope="col">Subtotaal</th>
+                        <th scope="col">Subtotaal (incl. btw)</th>
                         <th scope="col">Acties</th>
                     </tr>
                 </thead>
@@ -60,7 +60,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="subtotal">{{ number_format($item['product']->price * $item['quantity'], 2, ',', '.') }} €</td>
+                            <td class="subtotal">{{ number_format($item['product']->getPriceIncludingtax() * $item['quantity'], 2, ',', '.') }} €</td>
                             <td>
                                 <button type="button" class="btn btn-danger btn-sm remove-product">Verwijderen</button>
                             </td>

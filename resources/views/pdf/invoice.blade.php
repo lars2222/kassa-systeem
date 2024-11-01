@@ -1,4 +1,3 @@
-<!-- resources/views/pdf/invoice.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +16,7 @@
     <p>Datum: {{ $date }}</p>
     
     <h3>Transactiegegevens</h3>
-    <p>Totaal: €{{ number_format($transaction->total, 2, ',', '.') }}</p>
+    <p>Totaal (incl. btw): €{{ number_format($transaction->total, 2, ',', '.') }}</p>
 
     <h3>Producten</h3>
     <table>
@@ -25,17 +24,28 @@
             <tr>
                 <th>Productnaam</th>
                 <th>Aantal</th>
-                <th>Prijs per stuk</th>
-                <th>Totaal</th>
+                <th>Prijs per stuk (excl. btw)</th>
+                <th>Prijs per stuk (incl. btw)</th>
+                <th>Totaal (excl. btw)</th>
+                <th>Totaal (incl. btw)</th>
             </tr>
         </thead>
         <tbody>
             @foreach($products as $product)
+                @php
+                    $taxRatePercentage = $product->taxRate->percentage ?? 0;
+                    $priceExclVAT = $product->price;
+                    $priceInclVAT = $product->getPriceIncludingtax();
+                    $totalExclVAT = $priceExclVAT * $product->pivot->quantity;
+                    $totalInclVAT = $priceInclVAT * $product->pivot->quantity;
+                @endphp
             <tr>
                 <td>{{ $product->name }}</td>
                 <td>{{ $product->pivot->quantity }}</td>
-                <td>€{{ number_format($product->pivot->price_at_time, 2, ',', '.') }}</td>
-                <td>€{{ number_format($product->pivot->total, 2, ',', '.') }}</td>
+                <td>€{{ number_format($priceExclVAT, 2, ',', '.') }}</td>
+                <td>€{{ number_format($priceInclVAT, 2, ',', '.') }}</td>
+                <td>€{{ number_format($totalExclVAT, 2, ',', '.') }}</td>
+                <td>€{{ number_format($totalInclVAT, 2, ',', '.') }}</td>
             </tr>
             @endforeach
         </tbody>
