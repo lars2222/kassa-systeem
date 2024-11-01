@@ -80,7 +80,23 @@
                         <option value="pin">Pin</option>
                     </select>
                 </div>
-            
+
+                <div class="form-group bank-input" style="display: none">
+                    <label for="bank">Kies uw bank:</label>
+                    <select name="bank" id="bank" class="form-control">
+                        <option value="" disabled selected>Kies uw bank</option>
+                        <option value="rabobank">Rabobank</option>
+                        <option value="ing">ING</option>
+                        <option value="abnamro">ABN AMRO</option>
+                        <option value="sns">SNS Bank</option>
+                    </select>
+                </div>
+
+                <div class="form-group pin-input" style="display: none" >
+                    <label for="pin_code">voer uw pincode in</label>
+                    <input type="password" name="pin_code" class="form-control" minlength="4" maxlength="4" pattern="\d{4}" placeholder="****">
+                </div>
+
                 <div class="form-group cash-input" style="display:none;">
                     <label for="cash_received">Ontvangen bedrag:</label>
                     <input type="number" name="cash_received" id="cash_received" class="form-control" step="0.01" min="0">

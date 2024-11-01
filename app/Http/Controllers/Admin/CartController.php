@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Checkout\CheckoutRequest;
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -77,6 +78,8 @@ class CartController extends Controller
 
         $transaction = $this->createTransaction($totalAmount);
 
+        $this->createPayment($transaction->id, $request, $totalAmount, $change);
+
         $this->attachProductsToTransaction($transaction, $cart);
 
         $this->finalizeOrder($transaction->id, $cart);
@@ -93,26 +96,45 @@ class CartController extends Controller
         $change = 0.0;
 
         if ($request->payment_method === 'cash') {
-            $cashReceived = $request->input('cash_received');
-            if ($cashReceived < $totalAmount) {
-                redirect()->back()->withErrors(['cash_received' => 'Het ontvangen bedrag is niet voldoende om de bestelling te betalen.']);
-            }
-            $change = floatval($cashReceived) - floatval($totalAmount); 
+            $change = $this->processCashPayment($request, $totalAmount);
         } elseif ($request->payment_method === 'pin') {
-
+            $change = $this->processPinPayment($request, $totalAmount);
         }
 
         return $change;
     }
+    private function processCashPayment($request, $totalAmount)
+    {
+        $cashReceived = $request->input('cash_received');
+
+        if ($cashReceived < $totalAmount) {
+            return redirect()->back()->withErrors(['cash_received' => 'Het ontvangen bedrag is niet voldoende om de bestelling te betalen.']);
+        }
+
+        return floatval($cashReceived) - floatval($totalAmount);
+    }
+
+    private function processPinPayment($request)
+    {
+        $pinCode = $request->input('pin_code');
+
+        if (!preg_match('/^\d{4}$/', $pinCode) || !ctype_digit($pinCode)) {
+            return redirect()->back()->withErrors(['pin_code' => 'De PIN moet uit exact 4 cijfers bestaan en mag alleen cijfers bevatten.']);
+        }
+        
+        return 0.0; 
+    }
 
     private function createTransaction($totalAmount)
     {
-        return Transaction::create([
-            'user_id' => 1,
+        $transaction = Transaction::create([
+            'user_id' => 1, 
             'subtotal' => $totalAmount,
             'total' => $totalAmount, 
             'tax' => 0, 
         ]);
+
+        return $transaction;
     }
 
     private function attachProductsToTransaction($transaction, $cart)
@@ -131,13 +153,14 @@ class CartController extends Controller
             }    
         }
     }
-    
+
     private function finalizeOrder($transactionId, $cart)
     {
         $this->updateInventory($cart);       
         $this->cart->emptyCart();           
         session(['transaction_id' => $transactionId]); 
     }
+
 
     protected function updateInventory($cart)
     {
@@ -155,11 +178,23 @@ class CartController extends Controller
         }
     }
 
+    private function createPayment($transactionId, $request, $totalAmount, $change)
+    {
+        Payment::create([
+            'transaction_id' => $transactionId,
+            'amount' => $totalAmount,
+            'method' => $request->payment_method,
+            'cash_received' => $request->input('cash_received', 0), 
+            'change_given' => $change,
+        ]);
+    }
+    
     public function chooseReceiptOption()
     {
         $change = session('change', 0);
-        return view('client.shopping-cart.reciept', ['change' => $change]);
+        return view('client.shopping-cart.receipt', ['change' => $change]);
     }
+
 
     public function handleReceiptOption(Request $request)
     {
@@ -167,7 +202,7 @@ class CartController extends Controller
 
         $transactionId = session('transaction_id');
 
-        if($receiptOption === 'print'){
+        if ($receiptOption === 'print') {
             return redirect()->route('receipt.generatePdf', ['transactionId' => $transactionId]);
         }
 

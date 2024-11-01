@@ -3,9 +3,30 @@
 <script>
     $(document).ready(function() {
         const cashInputDiv = $('.cash-input');
+        const bankInputDiv = $('.bank-input');
+        const pinInputDiv = $('.pin-input');
 
         $('#payment_method').on('change', function() {
-            $(this).val() === 'cash' ? cashInputDiv.show() : cashInputDiv.hide();
+            const paymentMethod = $(this).val();
+
+            if (paymentMethod === 'cash') {
+                cashInputDiv.show();
+                bankInputDiv.hide();
+            } else if (paymentMethod === 'pin') {
+                cashInputDiv.hide();
+                bankInputDiv.show();
+            } else {
+                cashInputDiv.hide();
+                bankInputDiv.hide();
+            }
+        });
+
+        $('#bank').on('change', function() {
+            if ($(this).val()) {
+                pinInputDiv.show();
+            } else {
+                pinInputDiv.hide();
+            }
         });
 
         $('.add-to-cart-form').on('submit', function(event) {
@@ -22,8 +43,6 @@
                     quantity: quantity,
                 },
                 success: function(response) {
-                    // No message shown; user can continue shopping
-                    // Optionally, you can update cart count or other UI elements silently if needed
                 },
                 error: function(xhr) {
                     console.error("Er is een fout opgetreden bij het toevoegen van het product aan je winkelwagentje.", xhr);
