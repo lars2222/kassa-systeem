@@ -97,7 +97,7 @@ class CartController extends Controller
 
         if ($request->payment_method === 'cash') {
             $change = $this->processCashPayment($request, $totalAmount);
-        } elseif ($request->payment_method === 'pin') {
+        } elseif ($request->payment_method === 'card') {
             $change = $this->processPinPayment($request, $totalAmount);
         }
 
@@ -114,14 +114,16 @@ class CartController extends Controller
         return floatval($cashReceived) - floatval($totalAmount);
     }
 
-    private function processPinPayment($request)
+    private function processPinPayment($request, $totalAmount)
     {
         $pinCode = $request->input('pin_code');
-
+    
         if (!preg_match('/^\d{4}$/', $pinCode) || !ctype_digit($pinCode)) {
             return redirect()->back()->withErrors(['pin_code' => 'De PIN moet uit exact 4 cijfers bestaan en mag alleen cijfers bevatten.']);
         }
         
+        $request->merge(['cash_received' => $totalAmount]);
+    
         return 0.0; 
     }
 
@@ -183,8 +185,8 @@ class CartController extends Controller
         Payment::create([
             'transaction_id' => $transactionId,
             'amount' => $totalAmount,
-            'method' => $request->payment_method,
-            'cash_received' => $request->input('cash_received', 0), 
+            'method' => $request->input('payment_method'),
+            'cash_received' => floatval($request->input('cash_received')), 
             'change_given' => $change,
         ]);
     }

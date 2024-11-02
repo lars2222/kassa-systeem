@@ -77,7 +77,7 @@
                     <select name="payment_method" id="payment_method" class="form-control" required>
                         <option value="" disabled selected>Kies een betaalmethode</option>
                         <option value="cash">Contant</option>
-                        <option value="pin">Pin</option>
+                        <option value="card">Pin</option>
                     </select>
                 </div>
 

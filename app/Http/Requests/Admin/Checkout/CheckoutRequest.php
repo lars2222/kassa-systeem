@@ -10,7 +10,9 @@ class CheckoutRequest extends FormRequest
     {
         return [
             'payment_method' => 'required|string',
-            'cash_received' => 'required_if:payment_method,cash|numeric|min:0',
+            'pin_code' => 'required_if:payment_method,pin|min:4|max:4|nullable',
+            'cash_received' => 'required_if:payment_method,cash|numeric|min:0|nullable',
+
         ];
     }
 }

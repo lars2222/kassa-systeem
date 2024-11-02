@@ -12,7 +12,7 @@
             if (paymentMethod === 'cash') {
                 cashInputDiv.show();
                 bankInputDiv.hide();
-            } else if (paymentMethod === 'pin') {
+            } else if (paymentMethod === 'card') {
                 cashInputDiv.hide();
                 bankInputDiv.show();
             } else {
