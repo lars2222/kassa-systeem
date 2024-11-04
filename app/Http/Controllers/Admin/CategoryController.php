@@ -8,7 +8,6 @@ use App\Http\Requests\Admin\Categories\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Repositories\CategoryRepository;
-use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -57,11 +56,12 @@ class CategoryController extends Controller
         $category = Category::find($categoryId); 
     
         if (request()->ajax()) {
-            return view('client.partials.product-list', compact('products','category'));
+            return view('client.partials.product-list', compact('products'));
         }
         
         return view('client.webshop.products', compact('products', 'categories', 'category'));
     }
+    
     
     
     public function destroy(Category $category)

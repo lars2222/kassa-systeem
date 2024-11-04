@@ -153,7 +153,7 @@ class ProductController extends Controller
         }
     
         $categories = $this->categoryRepository->getAllPaginated();
-        return view('client.webshop.products', compact('products', 'categories'));
+        return view('client.partials.product-list', compact('products', 'categories'));
     }
 
     public function removeDiscount($productId, $discountId)
