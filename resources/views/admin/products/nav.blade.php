@@ -6,10 +6,13 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('products.discount-products')}} ">Kortingen aan producten koppelen</a>
+                <a class="nav-link" href="{{ route('products.discount-products') }}">Kortingen aan producten koppelen</a>
             </li>
-            <li>
+            <li class="nav-item">
                 <a class="nav-link" href="{{ route('products.stock') }}">Product Voorraad</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('products.create') }}">Maak product aan</a>
             </li>
         </ul>
     </div>

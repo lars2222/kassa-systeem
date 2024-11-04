@@ -1,16 +1,17 @@
 @extends('admin.layouts.app')
 
+@section('title', 'Categorieën') 
+
+@section('create-btn', route('categories.create'))
+
 @section('content')
 <div class="table-responsive">
     <table class="table table-bordered table-hover">
         <thead class="thead-light">
             <tr>
-                <th scope="col">naam</th>
-                <th scope="col">beschrijving</th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-                <th scope="col"></th>
+                <th scope="col">Naam</th>
+                <th scope="col">Beschrijving</th>
+                <th scope="col">Acties</th>  
             </tr>
         </thead>
         <tbody>
@@ -20,16 +21,12 @@
                     <td>{{ $category->description }}</td>
                     <td>
                         <a href="{{ route('categories.edit', $category) }}" class="btn btn-sm btn-dark me-2">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                            category bewerken
+                            <i class="fa-solid fa-pen-to-square"></i> Bewerken
                         </a>
-                        <form action="{{route('categories.destroy',$category)}}" method="post" class="d-inline">
+                        <form action="{{ route('categories.destroy', $category) }}" method="post" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <input type="hidden" name="id" value="{{$category->id}}">
-                            <button type="submit" class="btn btn-sm btn-danger me-2">
-                                verwijder
-                            </button>
+                            <button type="submit" class="btn btn-sm btn-danger me-2">Verwijder</button>
                         </form>
                     </td>
                 </tr>

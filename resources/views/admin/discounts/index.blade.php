@@ -1,5 +1,9 @@
 @extends('admin.layouts.app')
 
+@section('title', 'Kortingen')
+
+@section('create-btn', route('categories.create'))
+
 @section('content')
 <div class="table-responsive">
     <table class="table table-bordered table-hover">
