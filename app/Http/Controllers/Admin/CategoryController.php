@@ -54,10 +54,6 @@ class CategoryController extends Controller
         $products = Product::where('category_id', $categoryId)->get();
         $categories = Category::all(); 
         $category = Category::find($categoryId); 
-    
-        if (request()->ajax()) {
-            return view('client.partials.product-list', compact('products'));
-        }
         
         return view('client.webshop.products', compact('products', 'categories', 'category'));
     }

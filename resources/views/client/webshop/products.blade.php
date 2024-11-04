@@ -25,11 +25,11 @@
     <div class="results-container mt-4">
         <div class="container">
             <div class="row" style="display: flex; justify-content: center; flex-wrap: wrap;">
-                @foreach ($categories as $category)
+                @foreach ($categories as $cat)
                     <div class="col-md-2 mb-4 d-flex justify-content-center">
-                        <a href="#" class="category-card" onclick="loadProducts({{ $category->id }}); return false;">
+                        <a href="{{ route('category.show', $cat->id) }}" class="category-card">
                             <div class="card text-center" style="width: 100%; padding: 20px;">
-                                <h2>{{ $category->name }}</h2>
+                                <h2>{{ $cat->name }}</h2>
                             </div>
                         </a>
                     </div>
@@ -45,3 +45,4 @@
 @endsection  
 
 @include('client.webshop.products-js') 
+

@@ -4,13 +4,13 @@
             fetch('/cart/count')
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('cart-count').textContent = data.count; 
+                    document.getElementById('cart-count-value').textContent = data.count; 
                 })
                 .catch(error => console.error('Error fetching cart count:', error));
         }
 
         updateCartCount();
-        
+  
         const searchInput = document.querySelector('input[name="search"]');
 
         searchInput.addEventListener('input', function() {
@@ -24,21 +24,5 @@
                 })
                 .catch(error => console.error('Error:', error));
         });
-
-        window.loadProducts = function(categoryId) {
-            fetch(`/category/show/${categoryId}`)
-                .then(response => response.text())
-                .then(html => {
-                    document.querySelector('.products-list').innerHTML = html; 
-                    updateCartCount(); 
-                })
-                .catch(error => console.error('Error:', error));
-        };
-        
-        window.toggleProductInfo = function(button) {
-            const productInfo = button.closest('.card-body').querySelector('.product-info');
-            productInfo.style.display = productInfo.style.display === "none" ? "block" : "none";
-        };
     });
 </script>
-    
