@@ -41,6 +41,7 @@ Route::prefix('cart')->group(function() {
     Route::post('/empty', [CartController::class, 'emptyCart'])->name('cart.empty');
     Route::get('/receipt', [CartController::class, 'chooseReceiptOption'])->name('cart.receipt');
     Route::post('/receipt-option', [CartController::class, 'handleReceiptOption'])->name('cart.receiptOption');
+    Route::get('/count', [CartController::class, 'getCartCount']);
 });
 
 Route::get('/category/show/{categoryId}', [CategoryController::class, 'show'])->name('category.show');

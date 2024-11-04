@@ -2,6 +2,15 @@
 
 @section('content')
 <div class="container text-center">
+
+    <div id="cart-count-container" class="my-4">
+        <h2>
+            Winkelwagen: 
+            <a href="{{ route('cart.view') }}" id="cart-count" class="btn btn-primary" style="text-decoration: none; color: white;">
+                <span id="cart-count-value">0</span> producten
+            </a>
+        </h2> 
+    </div>
     
     <div class="my-4">
         @if(isset($category))

@@ -16,6 +16,7 @@
     </div>
     <div class="col-md-9">
         <h1 class="my-4">Winkelwagentje</h1>
+        <span id="cart-count-value">0</span> producten
     
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">

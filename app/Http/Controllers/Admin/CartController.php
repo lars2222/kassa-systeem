@@ -210,4 +210,10 @@ class CartController extends Controller
 
         return redirect()->route('cart.view')->with('success', 'Gefeliciteerd met je bestelling');
     }
+
+    public function getCartCount()
+    {
+        $cart = $this->cart->getCart();
+        return response()->json(['count' => count($cart)]);
+    }
 }

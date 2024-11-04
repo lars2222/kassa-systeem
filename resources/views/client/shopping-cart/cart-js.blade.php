@@ -8,7 +8,6 @@
 
         $('#payment_method').on('change', function() {
             const paymentMethod = $(this).val();
-
             if (paymentMethod === 'cash') {
                 cashInputDiv.show();
                 bankInputDiv.hide();
@@ -40,34 +39,36 @@
                 type: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',
+                    product_id: productId,
                     quantity: quantity,
                 },
                 success: function(response) {
+                    updateCartCount(); // Update cart count after adding
                 },
                 error: function(xhr) {
-                    console.error("Er is een fout opgetreden bij het toevoegen van het product aan je winkelwagentje.", xhr);
+                    console.error("Fout bij het toevoegen van het product aan de winkelwagentje.", xhr);
                 }
             });
         });
 
         $('.increase-quantity').click(function() {
-            let row = $(this).closest('tr');
-            let productId = row.data('product-id');
+            const row = $(this).closest('tr');
+            const productId = row.data('product-id');
             let quantity = parseInt(row.find('.quantity').val()) + 1;
             updateCart(productId, quantity);
         });
 
         $('.decrease-quantity').click(function() {
-            let row = $(this).closest('tr');
-            let productId = row.data('product-id');
+            const row = $(this).closest('tr');
+            const productId = row.data('product-id');
             let quantity = parseInt(row.find('.quantity').val()) - 1;
             if (quantity > 0) updateCart(productId, quantity);
         });
 
         $('.remove-product').click(function() {
-            let row = $(this).closest('tr');
-            let productId = row.data('product-id');
-            
+            const row = $(this).closest('tr');
+            const productId = row.data('product-id');
+
             $.ajax({
                 url: '/cart/remove/' + productId,
                 type: 'POST',
@@ -75,9 +76,10 @@
                 success: function() {
                     row.remove();
                     updateTotal();
+                    updateCartCount(); // Update cart count after removing
                 },
                 error: function(xhr) {
-                    console.error("Er is een fout opgetreden bij het verwijderen van het product.", xhr);
+                    console.error("Fout bij het verwijderen van het product.", xhr);
                 }
             });
         });
@@ -91,13 +93,13 @@
                     quantity: quantity,
                 },
                 success: function(response) {
-                    let row = $('tr[data-product-id="' + productId + '"]');
+                    const row = $('tr[data-product-id="' + productId + '"]');
                     row.find('.quantity').val(quantity);
                     row.find('.subtotal').text(formatCurrency(response.price * quantity));
                     updateTotal();
                 },
                 error: function(xhr) {
-                    console.error("Er is een fout opgetreden bij het bijwerken van de hoeveelheid.", xhr);
+                    console.error("Fout bij het bijwerken van de hoeveelheid.", xhr);
                 }
             });
         }
@@ -110,8 +112,18 @@
             $('.total').text(formatCurrency(total));
         }
 
+        function updateCartCount() {
+            $.get('/cart/count', function(data) {
+                $('#cart-count-value').text(data.count);
+            }).fail(function(xhr) {
+                console.error("Fout bij het ophalen van de winkelwagentje teller.", xhr);
+            });
+        }
+
         function formatCurrency(amount) {
             return amount.toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
         }
+
+        updateCartCount(); // Initial call to set the cart count
     });
 </script>
