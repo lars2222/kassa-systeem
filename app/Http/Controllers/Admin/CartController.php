@@ -54,13 +54,13 @@ class CartController extends Controller
     {
         $cart = $this->cart->getCart(); 
         $total = $this->cart->calculateTotal(); 
-    
+        $totalDiscount = $this->cart->calculateTotalDiscount(); 
+
         $categories = Category::take(6)->get(); 
         
-        $products = Product::all();
-    
-        return view('client.shopping-cart.index', compact('cart', 'total', 'categories', 'products'));
+        return view('client.shopping-cart.index', compact('cart', 'total', 'categories', 'totalDiscount'));
     }
+
 
     public function emptyCart()
     {

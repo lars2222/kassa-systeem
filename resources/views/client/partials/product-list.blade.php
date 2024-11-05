@@ -11,30 +11,26 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">{{ $product->name }}</h5>
                         
-                        @php
-                            $originalPrice = $product->price * (1 + ($product->taxRate->percentage ?? 0) / 100);
-                            $discountedPrice = $product->price_including_tax;
-                            $hasDiscount = $product->discounts()
-                                ->whereDate('start_date', '<=', Carbon\Carbon::today())
-                                ->where(function ($query) {
-                                    $query->whereNull('end_date')
-                                          ->orWhere('end_date', '>=', Carbon\Carbon::today());
-                                })
-                                ->exists();
-                        @endphp
-
-                        @if ($hasDiscount)
-                            <p class="card-text">Originele prijs (incl. btw): <span style="text-decoration: line-through;">{{ number_format($originalPrice, 2, ',', '.') }} €</span></p>
-                            <p class="card-text">Prijs (incl. korting en btw): {{ number_format($discountedPrice, 2, ',', '.') }} €</p>
+                        @if ($product->getActiveDiscount())
+                            <p class="card-text">Originele prijs (incl. btw): 
+                                <span style="text-decoration: line-through;">
+                                    {{ $product->getFormattedOriginalPrice() }}
+                                </span>
+                            </p>
+                            <p class="card-text">Prijs (incl. korting en btw): 
+                                {{ $product->getFormattedDiscountedPrice() }}
+                            </p>
                         @else
-                            <p class="card-text">Prijs (incl. btw): {{ number_format($discountedPrice, 2, ',', '.') }} €</p>
+                            <p class="card-text">Prijs (incl. btw): 
+                                {{ $product->getFormattedOriginalPrice() }}
+                            </p>
                         @endif
 
                         <button class="open-button" onclick="toggleProductInfo(this);">Product Info</button>
                         <div class="product-info" style="display: none;">
                             <ul id="product-details">
                                 <li>Productnaam: {{ $product->name }}</li>
-                                <li>Prijs (incl. korting en btw): {{ number_format($discountedPrice, 2, ',', '.') }} €</li>
+                                <li>Prijs (incl. korting en btw): {{ $product->getFormattedDiscountedPrice() }}</li>
                             </ul>
                             <button type="button" class="btn cancel" onclick="toggleProductInfo(this)">Sluiten</button>
                         </div>

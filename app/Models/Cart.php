@@ -59,10 +59,24 @@ class Cart
         $total = 0;
 
         foreach ($cart as $item) {
-            $total += $item['product']->price_including_tax * $item['quantity']; 
+            $total += $item['product']->getDiscountedPriceIncludingTax() * $item['quantity'];
         }
 
         return $total;
+    }
+
+    public function calculateTotalDiscount()
+    {
+        $cart = $this->getCart();
+        $totalDiscount = 0;
+
+        foreach ($cart as $item) {
+            $originalPrice = $item['product']->getOriginalPriceIncludingTax();
+            $discountedPrice = $item['product']->getDiscountedPriceIncludingTax();
+            $totalDiscount += ($originalPrice - $discountedPrice) * $item['quantity'];
+        }
+
+        return $totalDiscount;
     }
 
     public function getTotal()

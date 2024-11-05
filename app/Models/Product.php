@@ -62,28 +62,46 @@ class Product extends Model
             ->get();
     }
 
-    public function getPriceIncludingTaxAttribute()
+    public function getActiveDiscount()
+    {
+        return $this->discounts()
+                    ->whereDate('start_date', '<=', Carbon::today())
+                    ->where(function ($query) {
+                        $query->whereNull('end_date')
+                              ->orWhere('end_date', '>=', Carbon::today());
+                    })
+                    ->first();
+    }
+
+    public function getOriginalPriceIncludingTax()
     {
         $basePrice = $this->price;
+        if ($this->taxRate) {
+            $basePrice *= (1 + $this->taxRate->percentage / 100);
+        }
+        return $basePrice;
+    }
 
-        $discount = $this->discounts()
-                        ->whereDate('start_date', '<=', Carbon::today())
-                        ->where(function ($query) {
-                            $query->whereNull('end_date')
-                                ->orWhere('end_date', '>=', Carbon::today());
-                        })
-                        ->first();
+    public function getDiscountedPriceIncludingTax()
+    {
+        $price = $this->getOriginalPriceIncludingTax();
+        $discount = $this->getActiveDiscount();
 
         if ($discount) {
-            $basePrice -= ($basePrice * ($discount->value / 100)); 
+            $price -= ($price * ($discount->value / 100));
         }
 
-        if ($this->taxRate) {
-            $taxPercentage = $this->taxRate->percentage;
-            return $basePrice * (1 + $taxPercentage / 100);
-        }
+        return $price;
+    }
 
-        return $basePrice;
+    public function getFormattedOriginalPrice()
+    {
+        return number_format($this->getOriginalPriceIncludingTax(), 2, ',', '.') . ' €';
+    }
+
+    public function getFormattedDiscountedPrice()
+    {
+        return number_format($this->getDiscountedPriceIncludingTax(), 2, ',', '.') . ' €';
     }
 
 
