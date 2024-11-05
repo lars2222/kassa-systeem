@@ -26,27 +26,22 @@
                 <th>Aantal</th>
                 <th>Prijs per stuk (excl. btw)</th>
                 <th>Prijs per stuk (incl. btw)</th>
+                <th>Prijs na korting (incl. btw)</th>
                 <th>Totaal (excl. btw)</th>
                 <th>Totaal (incl. btw)</th>
             </tr>
         </thead>
         <tbody>
             @foreach($products as $product)
-                @php
-                    $taxRatePercentage = $product->taxRate->percentage ?? 0;
-                    $priceExclVAT = $product->price;
-                    $priceInclVAT = $product->price_including_tax;
-                    $totalExclVAT = $priceExclVAT * $product->pivot->quantity;
-                    $totalInclVAT = $priceInclVAT * $product->pivot->quantity;
-                @endphp
-            <tr>
-                <td>{{ $product->name }}</td>
-                <td>{{ $product->pivot->quantity }}</td>
-                <td>€{{ number_format($priceExclVAT, 2, ',', '.') }}</td>
-                <td>€{{ number_format($priceInclVAT, 2, ',', '.') }}</td>
-                <td>€{{ number_format($totalExclVAT, 2, ',', '.') }}</td>
-                <td>€{{ number_format($totalInclVAT, 2, ',', '.') }}</td>
-            </tr>
+                <tr>
+                    <td>{{ $product['name'] }}</td>
+                    <td>{{ $product['quantity'] }}</td>
+                    <td>€{{ number_format($product['price_excl_vat'], 2, ',', '.') }}</td>
+                    <td>€{{ number_format($product['price_incl_vat'], 2, ',', '.') }}</td>
+                    <td>€{{ number_format($product['discounted_price_incl_vat'], 2, ',', '.') }}</td>
+                    <td>€{{ number_format($product['total_excl_vat'], 2, ',', '.') }}</td>
+                    <td>€{{ number_format($product['total_incl_vat'], 2, ',', '.') }}</td>
+                </tr>
             @endforeach
         </tbody>
     </table>
