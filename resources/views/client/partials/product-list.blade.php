@@ -13,7 +13,7 @@
                         
                         @php
                             $originalPrice = $product->price * (1 + ($product->taxRate->percentage ?? 0) / 100);
-                            $discountedPrice = $product->price_including_discount; // Hier gebruik je de accessor
+                            $discountedPrice = $product->price_including_tax;
                             $hasDiscount = $product->discounts()
                                 ->whereDate('start_date', '<=', Carbon\Carbon::today())
                                 ->where(function ($query) {
