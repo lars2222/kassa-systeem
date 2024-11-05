@@ -148,10 +148,6 @@ class ProductController extends Controller
             return $query->where('name', 'like', '%' . $search . '%');
         })->get();
     
-        if ($request->ajax()) {
-            return view('client.partials.product-list', compact('products'));
-        }
-    
         $categories = $this->categoryRepository->getAllPaginated();
         return view('client.partials.product-list', compact('products', 'categories'));
     }

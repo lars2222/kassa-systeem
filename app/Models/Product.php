@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -61,13 +62,29 @@ class Product extends Model
             ->get();
     }
 
-    public function getPriceIncludingtax()
+    public function getPriceIncludingTaxAttribute()
     {
-        if ($this->taxRate) {
-            $taxPercentage = $this->taxRate->percentage; 
-            return $this->price * (1 + $taxPercentage / 100);
+        $basePrice = $this->price;
+
+        $discount = $this->discounts()
+                        ->whereDate('start_date', '<=', Carbon::today())
+                        ->where(function ($query) {
+                            $query->whereNull('end_date')
+                                ->orWhere('end_date', '>=', Carbon::today());
+                        })
+                        ->first();
+
+        if ($discount) {
+            $basePrice -= ($basePrice * ($discount->value / 100)); 
         }
-        return $this->price; 
+
+        if ($this->taxRate) {
+            $taxPercentage = $this->taxRate->percentage;
+            return $basePrice * (1 + $taxPercentage / 100);
+        }
+
+        return $basePrice;
     }
+
 
 }

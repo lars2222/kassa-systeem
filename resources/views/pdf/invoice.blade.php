@@ -35,7 +35,7 @@
                 @php
                     $taxRatePercentage = $product->taxRate->percentage ?? 0;
                     $priceExclVAT = $product->price;
-                    $priceInclVAT = $product->getPriceIncludingtax();
+                    $priceInclVAT = $product->price_including_tax;
                     $totalExclVAT = $priceExclVAT * $product->pivot->quantity;
                     $totalInclVAT = $priceInclVAT * $product->pivot->quantity;
                 @endphp

@@ -2,7 +2,7 @@
 
 @section('title', 'Kortingen')
 
-@section('create-btn', route('categories.create'))
+@section('create-btn', route('discounts.create'))
 
 @section('content')
 <div class="table-responsive">

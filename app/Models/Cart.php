@@ -59,7 +59,7 @@ class Cart
         $total = 0;
 
         foreach ($cart as $item) {
-            $total += $item['product']->getPriceIncludingtax() * $item['quantity']; 
+            $total += $item['product']->price_including_tax * $item['quantity']; 
         }
 
         return $total;

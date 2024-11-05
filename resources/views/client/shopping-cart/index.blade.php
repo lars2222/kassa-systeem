@@ -3,20 +3,21 @@
 @section('content')
 <div class="row">
     <div class="col-md-3">
-        <h2>zoek</h2>
+        <h2>Zoek</h2>
         <ul class="list-group">
             @include('client.partials.search-bar')
             
             @foreach ($categories as $category)
                 <li class="list-group-item">
-                    <a href="{{ route('category.show', $category->id)}}">{{ $category->name}}</a>
+                    <a href="{{ route('category.show', $category->id) }}">{{ $category->name }}</a>
                 </li>
             @endforeach                
         </ul>
     </div>
+    
     <div class="col-md-9">
         <h1 class="my-4">Winkelwagentje</h1>
-        <span id="cart-count-value">0</span> producten
+        <span id="cart-count-value">{{ count($cart) }}</span> producten
     
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -42,7 +43,7 @@
                     <tr>
                         <th scope="col">Product</th>
                         <th scope="col">Aantal</th>
-                        <th scope="col">Subtotaal (incl. btw)</th>
+                        <th scope="col">Subtotaal (incl. korting en btw)</th>
                         <th scope="col">Acties</th>
                     </tr>
                 </thead>
@@ -61,7 +62,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="subtotal">{{ number_format($item['product']->getPriceIncludingtax() * $item['quantity'], 2, ',', '.') }} €</td>
+                            <td class="subtotal">{{ number_format($item['product']->price_including_tax * $item['quantity'], 2, ',', '.') }} €</td>
                             <td>
                                 <button type="button" class="btn btn-danger btn-sm remove-product">Verwijderen</button>
                             </td>
@@ -82,7 +83,7 @@
                     </select>
                 </div>
 
-                <div class="form-group bank-input" style="display: none">
+                <div class="form-group bank-input" style="display: none;">
                     <label for="bank">Kies uw bank:</label>
                     <select name="bank" id="bank" class="form-control">
                         <option value="" disabled selected>Kies uw bank</option>
@@ -93,8 +94,8 @@
                     </select>
                 </div>
 
-                <div class="form-group pin-input" style="display: none" >
-                    <label for="pin_code">voer uw pincode in</label>
+                <div class="form-group pin-input" style="display: none">
+                    <label for="pin_code">Voer uw pincode in</label>
                     <input type="password" name="pin_code" class="form-control" minlength="4" maxlength="4" pattern="\d{4}" placeholder="****">
                 </div>
 

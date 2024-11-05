@@ -47,7 +47,7 @@ class CartController extends Controller
         $this->cart->updateQuantity($productId, $quantity);
     
         $product = Product::find($productId);
-        return response()->json(['price' => $product->getPriceIncludingtax()]);
+        return response()->json(['price' => $product->price_including_tax]);
     }
 
     public function viewCart()
@@ -148,8 +148,8 @@ class CartController extends Controller
 
                 $transaction->products()->attach($productId, [
                     'quantity' => $quantity, 
-                    'price_at_time' => $item['product']->getPriceIncludingtax(), 
-                    'total' => $quantity * $item['product']->getPriceIncludingtax(), 
+                    'price_at_time' => $item['product']->price_including_tax, 
+                    'total' => $quantity * $item['product']->price_including_tax, 
                     'discount_applied' => $item['discount'] ?? 0, 
                 ]);
             }    
