@@ -148,7 +148,7 @@ class CartController extends Controller
 
                 $transaction->products()->attach($productId, [
                     'quantity' => $quantity, 
-                    'price_at_time' => $item['product']->price_including_tax, 
+                    'price_at_time' => $item['product']->getOriginalPriceIncludingTax(), 
                     'total' => $quantity * $item['product']->price_including_tax, 
                     'discount_applied' => $item['discount'] ?? 0, 
                 ]);
