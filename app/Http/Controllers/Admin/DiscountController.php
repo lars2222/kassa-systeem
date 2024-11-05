@@ -20,6 +20,9 @@ class DiscountController extends Controller
 
     public function index()
     {
+        Discount::where('end_date', '<', now())->delete();
+
+
         $discounts = $this->discountRepository->getAllPaginated();
         return view('admin.discounts.index', compact('discounts'));
     }
