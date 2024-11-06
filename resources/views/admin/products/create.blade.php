@@ -7,7 +7,12 @@
         @csrf
         <div class="form-group">
             <label for="barcode">Barcode</label>
-            <input type="number" class="form-control" name="barcode" id="barcode" required>
+            <input type="number" class="form-control @error('barcode') is-invalid @enderror" name="barcode" id="barcode" required>
+            @error('barcode')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
 
         <div class="form-group">
@@ -17,7 +22,7 @@
 
         <div class="form-group">
             <label for="price">Prijs</label>
-            <input type="text" class="form-control" name="price" id="price" required>
+            <input type="number" class="form-control" name="price" id="price" required>
         </div>
 
         <div class="form-group">

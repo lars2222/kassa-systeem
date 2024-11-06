@@ -46,6 +46,10 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $products = $request->validated(); 
+
+        if (Product::where('barcode', $products['barcode'])->exists()) {
+            return redirect()->back()->withErrors(['barcode' => __('labels.barcode_exists')]);
+        }
     
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('products', 'public');
