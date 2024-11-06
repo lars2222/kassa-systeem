@@ -10,7 +10,6 @@
         <thead class="thead-light">
             <tr>
                 <th scope="col">Naam</th>
-                <th scope="col">Beschrijving</th>
                 <th scope="col">Acties</th>  
             </tr>
         </thead>
@@ -18,7 +17,6 @@
             @foreach($categories as $category)
                 <tr>
                     <td>{{ $category->name }}</td>
-                    <td>{{ $category->description }}</td>
                     <td>
                         <a href="{{ route('categories.edit', $category) }}" class="btn btn-sm btn-dark me-2">
                             <i class="fa-solid fa-pen-to-square"></i> Bewerken
