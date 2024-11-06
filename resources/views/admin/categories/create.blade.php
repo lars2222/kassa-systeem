@@ -15,11 +15,6 @@
             @enderror
         </div>
 
-        <div class="form-group">
-            <label for="description">beschrijving</label>
-            <input type="text" class="form-control" name="description" id="description" required>
-        </div>
-
         <button type="submit" class="btn btn-primary">Opslaan</button>
     </form>
 </div>

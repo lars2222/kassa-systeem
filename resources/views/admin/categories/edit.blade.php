@@ -10,11 +10,11 @@
         <div class="form-group">
             <label for="description">naam</label>
             <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $category->name) }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="name">description</label>
-            <input type="text" class="form-control" name="description" id="description" value="{{ old('description', $category->description) }}" required>
+            @error('name')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
 
         <button type="submit" class="btn btn-primary">Opslaan</button>
