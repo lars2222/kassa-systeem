@@ -6,8 +6,13 @@
     <form action="{{ route('categories.store') }}" method="post">
         @csrf
         <div class="form-group">
-            <label for="barcode">naam</label>
-            <input type="text" class="form-control" name="name" id="barcode" required>
+            <label for="name">naam</label>
+            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" required>
+            @error('name')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
 
         <div class="form-group">

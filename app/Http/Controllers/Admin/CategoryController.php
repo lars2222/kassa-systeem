@@ -31,9 +31,15 @@ class CategoryController extends Controller
 
     public function store(StoreCategoryRequest $request)
     {
+        if (Category::where('name', $request->name)->exists()) {
+            return redirect()->back()->withErrors(['name' => __('labels.category_exists')]);
+        }
+
         Category::create($request->all());
+
         return redirect()->route('categories.index')->with('success', __('labels.added'));
     }
+
 
     public function edit(Category $category)
     {
