@@ -9,6 +9,8 @@
                 .catch(error => console.error('Error fetching cart count:', error));
         }
 
+        setInterval(updateCartCount, 1000);
+
         updateCartCount();
   
         const searchInput = document.querySelector('input[name="search"]');
