@@ -65,9 +65,11 @@
                             <td class="subtotal">
                                 {{ number_format($item['product']->getDiscountedPriceIncludingTax() * $item['quantity'], 2, ',', '.') }} €
                             </td>
-                            <td class="original-price" style="text-decoration: line-through; color: grey;">
-                                {{ number_format($item['product']->getOriginalPriceIncludingTax() * $item['quantity'], 2, ',', '.') }} €
-                            </td>
+                            @if($totalDiscount > 0)
+                                <td class="original-price" style="text-decoration: line-through; color: grey;">
+                                    {{ number_format($item['product']->getOriginalPriceIncludingTax() * $item['quantity'], 2, ',', '.') }} €
+                                </td>
+                            @endif
                             <td>
                                 <button type="button" class="btn btn-danger btn-sm remove-product">Verwijderen</button>
                             </td>

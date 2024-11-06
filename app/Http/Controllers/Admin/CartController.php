@@ -39,15 +39,15 @@ class CartController extends Controller
     public function updateCart(Request $request, $productId)
     {
         $quantity = $request->input('quantity');
-    
+
         $request->validate([
             'quantity' => 'required|integer|min:1',
         ]);
-    
+
         $this->cart->updateQuantity($productId, $quantity);
-    
+
         $product = Product::find($productId);
-        return response()->json(['price' => $product->price_including_tax]);
+        return response()->json(['price' => $product->getDiscountedPriceIncludingTax()]); 
     }
 
     public function viewCart()
