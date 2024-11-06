@@ -12,6 +12,11 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" href="{{ route('taxRates.index') }}">
+                <i class="fas fa-tags"></i> belastingen
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="{{ route('discounts.index') }}">
                 <i class="fas fa-percent"></i> Kortingen
             </a>

@@ -1,5 +1,9 @@
 @extends('admin.layouts.app')
 
+@section('title', 'belastingen')
+
+@section('create-btn', route('taxRates.create'))
+
 @section('content')
 <div class="table-responsive">
     <table class="table table-bordered table-hover">
