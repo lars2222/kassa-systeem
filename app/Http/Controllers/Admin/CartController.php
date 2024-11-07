@@ -47,7 +47,15 @@ class CartController extends Controller
         $this->cart->updateQuantity($productId, $quantity);
 
         $product = Product::find($productId);
-        return response()->json(['price' => $product->getDiscountedPriceIncludingTax()]); 
+
+        $total = $this->cart->calculateTotalWithoutDiscount();
+        $totalDiscount = $this->cart->calculateTotalDiscount();
+
+        return response()->json([
+            'price' => $product->getDiscountedPriceIncludingTax(),
+            'total' => $total,
+            'totalDiscount' => $totalDiscount,
+        ]);
     }
 
     public function viewCart()
