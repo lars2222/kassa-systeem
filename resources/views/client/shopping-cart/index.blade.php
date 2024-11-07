@@ -43,7 +43,6 @@
                     <tr>
                         <th scope="col">Product</th>
                         <th scope="col">Aantal</th>
-                        <th scope="col">Subtotaal (incl. korting en btw)</th>
                         <th scope="col">Acties</th>
                     </tr>
                 </thead>
@@ -65,11 +64,6 @@
                             <td class="subtotal">
                                 {{ number_format($item['product']->getDiscountedPriceIncludingTax() * $item['quantity'], 2, ',', '.') }} €
                             </td>
-                            @if($totalDiscount > 0)
-                                <td class="original-price" style="text-decoration: line-through; color: grey;">
-                                    {{ number_format($item['product']->getOriginalPriceIncludingTax() * $item['quantity'], 2, ',', '.') }} €
-                                </td>
-                            @endif
                             <td>
                                 <button type="button" class="btn btn-danger btn-sm remove-product">Verwijderen</button>
                             </td>
