@@ -65,6 +65,18 @@ class Cart
         return $total;
     }
 
+    public function calculateTotalWithoutDiscount()
+    {
+        $cart = $this->getCart();
+        $total = 0;
+
+        foreach ($cart as $item) {
+            $total += $item['product']->getOriginalPriceIncludingTax() * $item['quantity'];
+        }
+
+        return $total;
+    }
+
     public function calculateTotalDiscount()
     {
         $cart = $this->getCart();

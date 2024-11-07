@@ -53,7 +53,7 @@ class CartController extends Controller
     public function viewCart()
     {
         $cart = $this->cart->getCart(); 
-        $total = $this->cart->calculateTotal(); 
+        $total = $this->cart->calculateTotalWithoutDiscount(); 
         $totalDiscount = $this->cart->calculateTotalDiscount(); 
 
         $categories = Category::take(6)->get(); 
