@@ -5,7 +5,6 @@
     <div class="col-md-3">
         <h2>Zoek</h2>
         <ul class="list-group">
-            @include('client.partials.search-bar')
             
             @foreach ($categories as $category)
                 <li class="list-group-item">
